@@ -14,27 +14,28 @@
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
 	    android:paddingBottom="10dp" >
+	
+	    <Button
+	        android:id="@+id/button1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Add"
+	        android:layout_gravity="1" />
+	
+	    <Button
+	        android:id="@+id/button1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Edit"
+	        android:layout_gravity="2" />
 
 	    <Button
 	        android:id="@+id/button1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_weight="0.33"
-	        android:text="Add" />
-
-	    <Button
-	        android:id="@+id/button1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.33"
-	        android:text="Edit" />
-
-	    <Button
-	        android:id="@+id/button1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0.33"
-	        android:text="Sync" />
+	        android:text="Sync"
+	        android:layout_gravity="3" />
+	    
 	</LinearLayout>
     
 	<LinearLayout
@@ -79,14 +80,14 @@
 
 	        <Button
 	            android:id="@+id/button2"
-	            android:layout_width="114dp"
+	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="right"
 	            android:text="Button" />
 
 	        <Button
 	            android:id="@+id/button3"
-	            android:layout_width="114dp"
+	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="right"
 	            android:text="Button" />

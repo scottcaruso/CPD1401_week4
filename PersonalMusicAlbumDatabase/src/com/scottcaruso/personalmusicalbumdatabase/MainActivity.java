@@ -3,12 +3,16 @@ package com.scottcaruso.personalmusicalbumdatabase;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseObject;
 
 public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Parse.initialize(this, "GSJTIddEqF4RT6PmWi6VgKx63b5DWCDVDNRZyR9m", "O17apZByYdFumITsEpo8ndtjfFQ7MIJ3C7U0SYxt");
         setContentView(R.layout.activity_main);
     }
 

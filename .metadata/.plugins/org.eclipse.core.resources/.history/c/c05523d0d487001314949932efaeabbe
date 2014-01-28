@@ -87,25 +87,6 @@ public class MainActivity extends Activity {
 	               
     public void fillDatabaseIfEmpty()
     {
-    	Cursor currentDB = sql.getAllAlbums();
-    	int numberOfItems = currentDB.getCount();
-    	if (numberOfItems == 0)
-    	{
-    		int numberOfRecords = masterArrray.getCount();
-            for (int x = 0; x < numberOfRecords; x++)
-            {
-                String stringToAdd = "Test";//[self createInsertString:[masterList objectAtIndex:x]];
-                sql.addItemToDatabase(stringToAdd);
-            }
-    	} else {
-    		Log.i("Info","Local data already exists. No need to populate database.");
-    	}
-    	currentDB = sql.getAllAlbums();
-    	reloadListView();
-    }
-    
-    public void reloadListView()
-    {
     	
     }
 }

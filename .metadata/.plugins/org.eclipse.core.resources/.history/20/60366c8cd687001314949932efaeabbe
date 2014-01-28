@@ -101,11 +101,9 @@ public class MainActivity extends Activity {
     		Log.i("Info","Local data already exists. No need to populate database.");
     	}
     	currentDB = sql.getAllAlbums();
-    	reloadListView();
-    }
-    
-    public void reloadListView()
-    {
+    	masterArrray = sql.getAllAlbums();
     	
+        masterList = [sql returnAllRecords];
+        [albumTable reloadData];
     }
 }

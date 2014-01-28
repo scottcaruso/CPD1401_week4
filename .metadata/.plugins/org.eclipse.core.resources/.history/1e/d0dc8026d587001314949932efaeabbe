@@ -94,9 +94,5 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		 
 		 //do things
 	 }
-	 
-	 public void addItemToDatabase(String itemToAdd){
-		 //do things
-	 }
 		 
 }

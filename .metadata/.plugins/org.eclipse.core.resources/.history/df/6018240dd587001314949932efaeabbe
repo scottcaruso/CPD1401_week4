@@ -92,20 +92,22 @@ public class MainActivity extends Activity {
     	if (numberOfItems == 0)
     	{
     		int numberOfRecords = masterArrray.getCount();
+    	}
+    	
+        NSMutableArray *currentDB = [sql returnAllRecords];
+        int numberOfItems = [currentDB count];
+        if (numberOfItems == 0)
+        {
+            int numberOfRecords = [masterList count];
             for (int x = 0; x < numberOfRecords; x++)
             {
-                String stringToAdd = "Test";//[self createInsertString:[masterList objectAtIndex:x]];
-                sql.addItemToDatabase(stringToAdd);
+                NSString *stringToAdd = [self createInsertString:[masterList objectAtIndex:x]];
+                [sql addItemToLocalDatabase:stringToAdd];
             }
-    	} else {
-    		Log.i("Info","Local data already exists. No need to populate database.");
-    	}
-    	currentDB = sql.getAllAlbums();
-    	reloadListView();
-    }
-    
-    public void reloadListView()
-    {
-    	
+        } else {
+            NSLog(@"Local data already exists. No need to populate database.");
+        }
+        masterList = [sql returnAllRecords];
+        [albumTable reloadData];
     }
 }

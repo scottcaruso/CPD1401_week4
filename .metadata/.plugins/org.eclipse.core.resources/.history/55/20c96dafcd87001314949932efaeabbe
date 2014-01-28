@@ -33,8 +33,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         
         Parse.initialize(this, "GSJTIddEqF4RT6PmWi6VgKx63b5DWCDVDNRZyR9m", "O17apZByYdFumITsEpo8ndtjfFQ7MIJ3C7U0SYxt");
-        retrieveAllAlbums("Startup");
-        
         setContentView(R.layout.activity_main);
         
     }
@@ -86,25 +84,6 @@ public class MainActivity extends Activity {
     }
 	               
     public void fillDatabaseIfEmpty()
-    {
-    	Cursor currentDB = sql.getAllAlbums();
-    	int numberOfItems = currentDB.getCount();
-    	if (numberOfItems == 0)
-    	{
-    		int numberOfRecords = masterArrray.getCount();
-            for (int x = 0; x < numberOfRecords; x++)
-            {
-                String stringToAdd = "Test";//[self createInsertString:[masterList objectAtIndex:x]];
-                sql.addItemToDatabase(stringToAdd);
-            }
-    	} else {
-    		Log.i("Info","Local data already exists. No need to populate database.");
-    	}
-    	currentDB = sql.getAllAlbums();
-    	reloadListView();
-    }
-    
-    public void reloadListView()
     {
     	
     }

@@ -51,7 +51,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		 this.onCreate(db);
 	 }
 	 
-	 public Cursor getAllAlbums() {
+	 public Cursor getAllChampions() {
 
 	       String query = "SELECT "+TABLE_CHAMPS+"."+KEY_NAME+","+TABLE_ROLES+"."+
 	       KEY_ROLE+","+TABLE_CHAMPS+"."+KEY_COST+" FROM " + TABLE_CHAMPS + " JOIN " +
@@ -92,10 +92,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	 
 	 public void emptyDatabase() {
 		 
-		 //do things
-	 }
-	 
-	 public void addItemToDatabase(String itemToAdd){
 		 //do things
 	 }
 		 

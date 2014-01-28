@@ -1,0 +1,98 @@
+package com.scottcaruso.personalmusicalbumdatabase;
+
+import java.util.List;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+public class SQLiteHelper extends SQLiteOpenHelper {
+
+	private static final int DB_VER = 1;
+	private static final String DB_NAME = "AlbumDB";
+	
+    private static final String TABLE_ALBUMS = "albums";
+    private static final String TABLE_GENRES = "genres";
+
+    private static final String KEY_ID = "id";
+    private static final String DB_ID = "db_id";
+    private static final String KEY_ALBUMNAME = "name";
+    private static final String KEY_ARTIST = "artist";
+    private static final String KEY_YEAR = "year";
+    private static final String KEY_GENRE = "genre";
+
+    private static final String[] COLUMNS = {KEY_ID,DB_ID,KEY_ALBUMNAME,KEY_ALBUMNAME,KEY_YEAR,KEY_GENRE};
+	
+	public SQLiteHelper(Context context){
+		super(context, DB_NAME, null, DB_VER);
+	}
+	
+	 @Override
+	 public void onCreate(SQLiteDatabase db) {
+	 
+		 String CREATE_TABLE_ALBUMS = "CREATE TABLE IF NOT EXISTS " + TABLE_ALBUMS + 
+		 		"(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+		 		"db_id varchar(50), name varchar(50), artist varchar(50), year INTEGER, genre INTEGER);";
+		 String CREATE_TABLE_GENRES = "CREATE TABLE genres (id INTEGER PRIMARY KEY," +
+		 		"genre_id INTEGER, role varchar(20));";
+		 db.execSQL(CREATE_TABLE_ALBUMS);
+		 db.execSQL(CREATE_TABLE_GENRES);
+		 //db.execSQL(POPULATE_ROLES);
+		 //db.execSQL(POPULATE_CHAMPS);
+	 }
+	 
+	 @Override
+	 public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	        
+		 db.execSQL("DROP TABLE IF EXISTS champions");
+	 
+		 this.onCreate(db);
+	 }
+	 
+	 public Cursor getAllChampions() {
+
+	       String query = "SELECT "+TABLE_CHAMPS+"."+KEY_NAME+","+TABLE_ROLES+"."+
+	       KEY_ROLE+","+TABLE_CHAMPS+"."+KEY_COST+" FROM " + TABLE_CHAMPS + " JOIN " +
+	       TABLE_ROLES+" ON "+ TABLE_CHAMPS+"."+KEY_ROLE+"="+TABLE_ROLES+"."+KEY_ID+";";
+	       
+	       Log.i("Info",query);
+	 
+	       SQLiteDatabase db = this.getWritableDatabase();
+	       Cursor cursor = db.rawQuery(query, null);
+	       	        
+	       return cursor;
+	      
+	   }
+	 
+	 public Cursor getSpecificRole(int roleID) {
+		 
+		 	String query = "SELECT "+KEY_NAME+","+KEY_ROLE+","+KEY_COST+" FROM "+TABLE_CHAMPS+" WHERE "+KEY_ROLE+"="
+		 	+String.valueOf(roleID)+";";
+			       
+			Log.i("Info",query);
+			 
+			SQLiteDatabase db = this.getWritableDatabase();
+			Cursor cursor = db.rawQuery(query, null);
+			       	        
+			return cursor;
+	 }
+	 
+	 public Cursor getRoles() {
+
+	       String query = "SELECT  * FROM " + TABLE_ROLES;
+	 
+	       SQLiteDatabase db = this.getWritableDatabase();
+	       Cursor cursor = db.rawQuery(query, null);
+	       	        
+	       return cursor;
+	      
+	   }
+	 
+	 public void emptyDatabase() {
+		 
+		 //do things
+	 }
+		 
+}

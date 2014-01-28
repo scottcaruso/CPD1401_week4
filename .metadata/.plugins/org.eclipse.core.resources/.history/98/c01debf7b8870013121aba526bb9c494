@@ -1,0 +1,98 @@
+package com.scottcaruso.personalmusicalbumdatabase;
+
+import java.util.List;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+public class SQLiteHelper extends SQLiteOpenHelper {
+
+	private static final int DB_VER = 1;
+	private static final String DB_NAME = "LeagueDB";
+	
+    private static final String TABLE_CHAMPS = "champions";
+    private static final String TABLE_ROLES = "roles";
+
+    // Books Table Columns names
+    private static final String KEY_ID = "id";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_ROLE = "role";
+    private static final String KEY_COST = "cost";
+
+    private static final String[] COLUMNS = {KEY_ID,KEY_NAME,KEY_ROLE,KEY_COST};
+	
+	public SQLiteHelper(Context context){
+		super(context, DB_NAME, null, DB_VER);
+	}
+	
+	 @Override
+	 public void onCreate(SQLiteDatabase db) {
+	 
+		 String CREATE_TABLE_CHAMPS = "CREATE TABLE champions" +
+		 		"(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+		 		"name varchar(50), role INTEGER, cost INTEGER);";
+		 String CREATE_TABLE_ROLES = "CREATE TABLE roles (id INTEGER PRIMARY KEY," +
+		 		"role varchar(20));";
+		 String POPULATE_ROLES = "INSERT INTO roles (id, role) VALUES" +
+		 		"(1, \"Assassin\"), (2, \"Fighter\"), (3, \"Mage\")," +
+				"(4, \"Marksman\"), (5, \"Support\"), (6, \"Tank\");";
+		 String POPULATE_CHAMPS = "INSERT INTO champions (name, role, cost) VALUES(\"Aatrox\", 2, 975),(\"Ahri\", 3, 975),(\"Akali\", 1, 975),(\"Alistar\",6, 585),(\"Amumu\", 6, 790),(\"Anivia\", 3, 975),(\"Annie\", 3, 260),(\"Ashe\", 4, 260),(\"Blitzcrank\", 6, 790),(\"Brand\", 3, 880),(\"Caitlyn\", 4, 880), (\"Cassiopeia\", 3, 880), (\"ChoGath\", 6, 585), (\"Corki\", 4, 790), (\"Diana\", 2, 975), (\"Dr. Mundo\", 2, 585), (\"Elise\", 3, 975), (\"Evelynn\", 1, 585), (\"Ezreal\", 4, 880), (\"Fiddlesticks\", 3, 585), (\"Fiora\", 2, 975), (\"Fizz\", 1, 975), (\"Galio\", 6, 880), (\"Gangplank\", 2, 790), (\"Garen\", 2, 260), (\"Gragas\", 3, 790), (\"Graves\", 4, 880), (\"Hecarim\", 2, 975), (\"Heimerdinger\", 3, 790), (\"Irelia\", 2, 880), (\"Janna\", 5, 585), (\"Jarvan IV\", 6, 880), (\"Jax\", 2, 585), (\"Jayce\", 2, 975), (\"Jinx\", 4, 975), (\"Karma\", 3, 790), (\"Karthus\", 3, 790), (\"Kassadin\", 1, 790), (\"Katarina\", 1, 790), (\"Kayle\", 2, 260), (\"Kennen\", 3, 880), (\"KhaZix\", 1, 975), (\"KogMaw\", 4, 880), (\"LeBlanc\", 1, 790), (\"Lee Sin\", 2, 880), (\"Leona\", 6, 880), (\"Lissandra\", 3, 975), (\"Lucian\", 4, 975), (\"Lulu\", 5, 975), (\"Lux\", 3, 790), (\"Malphite\", 6, 585), (\"Malzahar\", 3, 880), (\"Maokai\", 6, 880), (\"Master Yi\", 1, 260), (\"Miss Fortune\", 4, 790), (\"Mordekaiser\", 2, 790), (\"Morgana\", 3, 585), (\"Nami\", 5, 975), (\"Nasus\", 2, 585), (\"Nautilus\", 6, 975), (\"Nidalee\", 1, 790), (\"Nocturne\", 1, 880), (\"Nunu\", 5, 260), (\"Olaf\", 2, 790), (\"Orianna\", 3, 880), (\"Pantheon\", 2, 790), (\"Poppy\", 2, 260), (\"Quinn\", 4, 975), (\"Rammus\", 6, 790), (\"Renekton\", 2, 880),(\"Rengar\", 1, 975),(\"Riven\", 2, 880), (\"Rumble\", 2, 880), (\"Ryze\", 3, 260), (\"Sejuani\", 6, 975), (\"Shaco\", 1, 790), (\"Shen\", 6, 790), (\"Shyvana\", 2, 975), (\"Singed\", 6, 585), (\"Sion\", 2, 585), (\"Sivir\", 4, 260), (\"Skarner\", 2, 880),(\"Sona\", 5, 790), (\"Soraka\", 5, 260), (\"Swain\", 3, 880), (\"Syndra\", 3, 975), (\"Talon\", 1, 880), (\"Taric\", 5, 585), (\"Teemo\", 4, 585), (\"Thresh\", 5, 975), (\"Tristana\", 4, 585), (\"Trundle\", 2, 880), (\"Tryndamere\", 2, 585), (\"Twisted Fate\", 3, 585),(\"Twitch\", 4, 790), (\"Udyr\", 2, 585), (\"Urgot\", 4, 790), (\"Varus\", 4, 975), (\"Vayne\", 4, 880), (\"Veigar\", 3, 585), (\"Vi\", 2, 975), (\"Viktor\", 3, 975), (\"Vladimir\", 3, 880), (\"Volibear\", 2, 975), (\"Warwick\", 2, 260), (\"Wukong\", 2, 880),(\"Xerath\", 3, 880), (\"Xin Zhao\", 2, 975), (\"Yasuo\", 2, 975), (\"Yorick\", 2, 880), (\"Zac\", 6, 975), (\"Zed\", 1, 975);";
+	 
+		 db.execSQL(CREATE_TABLE_CHAMPS);
+		 db.execSQL(CREATE_TABLE_ROLES);
+		 db.execSQL(POPULATE_ROLES);
+		 db.execSQL(POPULATE_CHAMPS);
+	 }
+	 
+	 @Override
+	 public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	        
+		 db.execSQL("DROP TABLE IF EXISTS champions");
+	 
+		 // create fresh books table
+		 this.onCreate(db);
+	 }
+	 
+	 public Cursor getAllChampions() {
+
+	       String query = "SELECT "+TABLE_CHAMPS+"."+KEY_NAME+","+TABLE_ROLES+"."+
+	       KEY_ROLE+","+TABLE_CHAMPS+"."+KEY_COST+" FROM " + TABLE_CHAMPS + " JOIN " +
+	       TABLE_ROLES+" ON "+ TABLE_CHAMPS+"."+KEY_ROLE+"="+TABLE_ROLES+"."+KEY_ID+";";
+	       
+	       Log.i("Info",query);
+	 
+	       SQLiteDatabase db = this.getWritableDatabase();
+	       Cursor cursor = db.rawQuery(query, null);
+	       	        
+	       return cursor;
+	      
+	   }
+	 
+	 public Cursor getSpecificRole(int roleID) {
+		 
+		 	String query = "SELECT "+KEY_NAME+","+KEY_ROLE+","+KEY_COST+" FROM "+TABLE_CHAMPS+" WHERE "+KEY_ROLE+"="
+		 	+String.valueOf(roleID)+";";
+			       
+			Log.i("Info",query);
+			 
+			SQLiteDatabase db = this.getWritableDatabase();
+			Cursor cursor = db.rawQuery(query, null);
+			       	        
+			return cursor;
+	 }
+	 
+	 public Cursor getRoles() {
+
+	       String query = "SELECT  * FROM " + TABLE_ROLES;
+	 
+	       SQLiteDatabase db = this.getWritableDatabase();
+	       Cursor cursor = db.rawQuery(query, null);
+	       	        
+	       return cursor;
+	      
+	   }
+		 
+}

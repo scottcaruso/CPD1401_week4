@@ -120,19 +120,37 @@ public class MainActivity extends Activity {
     	String artistNameString = "Artist Name"; //add reference to text in textview
     	String yearString = "Year"; //add reference to text in textview
     	String albumGenreFull = "Genre"; //add reference to text in textview
-    	String albumGenreId = "Genre ID"; //create function for this
+    	String albumGenreId = "ID"; //add reference to text in textview
     	
-    	if (albumNameString == "" || artistNameString == "")
+    	if (albumNameString == "")
     	{
-    		Toast warning = Toast.makeText(this, "You need to specify both an album name and an artist name to save data to the database.", Toast.LENGTH_SHORT);
-    		warning.show();
-    	} else {
-    		String returnString = "INSERT INTO albums (database_id,album_name,artist_name," +
-    				"album_year,genre_code) VALUES (\"NEW\",\""+albumNameString+"\",\""
-    				+artistNameString+"\","+yearString+","+albumGenreId+");";
-    		sql.addItemToDatabase(returnString);
-    		//Add this object to the current master Cursor
-    		reloadListView();
+    		Toast.makeText(this, "You need to specify both an album name and an artist name to save data to the database.", Toast.LENGTH_SHORT);
+    		Toast.show;
     	}
+    }
+    
+    -(void)addToLocalDatabase
+    {
+        NSString *albumNameString = albumNameField.text;
+        NSString *artistNameString = artistName.text;
+        NSString *yearString = dateButton.titleLabel.text;
+        NSString *albumGenreFull = genreButton.titleLabel.text;
+        NSString *albumGenreId = [self retrieveGenreCode:albumGenreFull];
+        if ([albumNameString isEqualToString:@""] || [artistNameString isEqualToString:@""])
+        {
+            UIAlertView *emptyFields = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"You need to specify both an album name and an artist name to save data to the database." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [emptyFields show];
+        } else
+        {
+            NSString *returnString = [[NSString alloc] initWithFormat:@"INSERT INTO albums (database_id,album_name,artist_name,album_year,genre_code) VALUES(\"NEW\",\"%@\",\"%@\",%i,%i);",albumNameString,artistNameString,[yearString intValue],[albumGenreId intValue]];
+            [sql addItemToLocalDatabase:returnString];
+            NSMutableDictionary *thisObject = [[NSMutableDictionary alloc] init];
+            [thisObject setValue:albumNameString forKey:@"album"];
+            [thisObject setValue:artistNameString forKey:@"artist"];
+            [thisObject setValue:albumGenreId forKey:@"genre"];
+            [thisObject setValue:yearString forKey:@"date"];
+            [masterList addObject:thisObject];
+            [albumTable reloadData];
+        }
     }
 }

@@ -130,9 +130,23 @@ public class MainActivity extends Activity {
     		String returnString = "INSERT INTO albums (database_id,album_name,artist_name," +
     				"album_year,genre_code) VALUES (\"NEW\",\""+albumNameString+"\",\""
     				+artistNameString+"\","+yearString+","+albumGenreId+");";
-    		sql.addItemToDatabase(returnString);
-    		//Add this object to the current master Cursor
-    		reloadListView();
     	}
+    }
+    
+    -(void)addToLocalDatabase
+    {
+
+        } else
+        {
+            NSString *returnString = [[NSString alloc] initWithFormat:@"INSERT INTO albums (database_id,album_name,artist_name,album_year,genre_code) VALUES(\"NEW\",\"%@\",\"%@\",%i,%i);",albumNameString,artistNameString,[yearString intValue],[albumGenreId intValue]];
+            [sql addItemToLocalDatabase:returnString];
+            NSMutableDictionary *thisObject = [[NSMutableDictionary alloc] init];
+            [thisObject setValue:albumNameString forKey:@"album"];
+            [thisObject setValue:artistNameString forKey:@"artist"];
+            [thisObject setValue:albumGenreId forKey:@"genre"];
+            [thisObject setValue:yearString forKey:@"date"];
+            [masterList addObject:thisObject];
+            [albumTable reloadData];
+        }
     }
 }

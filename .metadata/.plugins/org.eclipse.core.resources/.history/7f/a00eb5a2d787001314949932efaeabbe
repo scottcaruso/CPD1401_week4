@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.Parse;
@@ -105,34 +104,8 @@ public class MainActivity extends Activity {
     	reloadListView();
     }
     
-    //Create insert string function will go here.
-    
-    //Table population functions
-    
     public void reloadListView()
     {
     	
-    }
-    
-    public void addItemToLocalDatabase()
-    {
-    	String albumNameString = "Album Name"; //add reference to text in textview
-    	String artistNameString = "Artist Name"; //add reference to text in textview
-    	String yearString = "Year"; //add reference to text in textview
-    	String albumGenreFull = "Genre"; //add reference to text in textview
-    	String albumGenreId = "Genre ID"; //create function for this
-    	
-    	if (albumNameString == "" || artistNameString == "")
-    	{
-    		Toast warning = Toast.makeText(this, "You need to specify both an album name and an artist name to save data to the database.", Toast.LENGTH_SHORT);
-    		warning.show();
-    	} else {
-    		String returnString = "INSERT INTO albums (database_id,album_name,artist_name," +
-    				"album_year,genre_code) VALUES (\"NEW\",\""+albumNameString+"\",\""
-    				+artistNameString+"\","+yearString+","+albumGenreId+");";
-    		sql.addItemToDatabase(returnString);
-    		//Add this object to the current master Cursor
-    		reloadListView();
-    	}
     }
 }

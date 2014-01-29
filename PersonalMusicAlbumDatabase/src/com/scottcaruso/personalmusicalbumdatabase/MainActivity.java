@@ -1,11 +1,14 @@
 package com.scottcaruso.personalmusicalbumdatabase;
 
+import java.awt.font.NumericShaper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.Menu;
@@ -207,5 +210,52 @@ public class MainActivity extends Activity {
             }
         }  
     }
+    
+    public void deleteItemsInCloud(Context context)
+    {
+        SharedPreferences preferences = context.getSharedPreferences("Delete", Context.MODE_PRIVATE);
+        String toDelete = preferences.getString("items",null);
+        if (!toDelete.isEmpty())
+        {
+        	if (!toDelete.contains(","))
+        	{
+        		
+        	} else
+        	{
+        		int stringLength = toDelete.length();
+        		int numberOfCommas = 1;
+        		int locationOfPreviousComma = 0;
+        		String comma = ",";
+        		for (int x = 0; x <= stringLength; x++)
+        		{
+        			char thisChar = toDelete.charAt(x);
+        			if (thisChar == comma.charAt(0))
+        			{
+        				String id = toDelete.substring(locationOfPreviousComma, x+1);
+        				ParseQuery<ParseObject> query = ParseQuery.getQuery("TestObject");
+        				query.getInBackground(id, new GetCallback<ParseObject>() {
+                        	public void done(ParseObject thisAlbum, ParseException e) {
+                        		if (e == null) {
+                                thisAlbum.deleteInBackground();
+                        		}
+                        	}
+                        });
+        				locationOfPreviousComma = x+1;
+        				numberOfCommas++;
+        			}
+        		}
+        	}
+        }
+    }
+    
+  //--Init
+    int myvar = 12;
+
+
+    //--SAVE Data
+    SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);  
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putInt("var1", myvar);
+    editor.commit();
     
 }

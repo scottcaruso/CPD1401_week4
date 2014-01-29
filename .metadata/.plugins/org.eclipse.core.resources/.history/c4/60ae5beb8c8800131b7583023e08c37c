@@ -266,7 +266,7 @@ public class MainActivity extends Activity {
             	return genreID;
             }
         }
-        return "";
+        return null;
     }
     
   //--Init

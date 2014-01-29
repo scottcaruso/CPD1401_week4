@@ -260,13 +260,15 @@ public class MainActivity extends Activity {
         for (int x = 0; x < listOfGenres.length; x++)
         {
             String thisGenre = listOfGenres[x];
-            if (genreName == thisGenre)
+        	NSDictionary *thisGenre = [listOfGenres objectAtIndex:x];
+            NSString *currentGenre = [thisGenre objectForKey:@"genre"];
+            if ([currentGenre isEqualToString:genreName])
             {
-            	String genreID = String.valueOf(x+1);
-            	return genreID;
+                NSString *genreID = [thisGenre objectForKey:@"id"];
+                return genreID;
             }
         }
-        return "";
+        return @"";
     }
     
   //--Init

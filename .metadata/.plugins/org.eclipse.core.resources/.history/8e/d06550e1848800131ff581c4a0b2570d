@@ -167,6 +167,7 @@ public class MainActivity extends Activity {
                     newAlbum.put("artist_name", thisArtist);
                     newAlbum.put("album_year", dateInt);
                     newAlbum.put("genre_code", genreInt);
+                    
                     newAlbum.saveInBackground();
                 } while (newAlbums.moveToNext());
             }

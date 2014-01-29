@@ -8,4 +8,7 @@
 <fullyQualifiedTypeName name="com.parse.FindCallback"/>
 <fullyQualifiedTypeName name="com.parse.ParseQuery"/>
 <fullyQualifiedTypeName name="android.util.Log"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="android.widget.Toast"/>
 </qualifiedTypeNameHistroy>

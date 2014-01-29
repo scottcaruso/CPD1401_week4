@@ -153,34 +153,37 @@ public class MainActivity extends Activity {
     	Cursor newAlbums = sql.getNewAlbums();
         if (newAlbums.getCount() > 0)
         {
-            if (newAlbums.moveToFirst()) 
-            {
-                do {
-                	String thisTitle = newAlbums.getString(1);
-                    String thisArtist = newAlbums.getString(2);
-                    String thisDate = newAlbums.getString(3);
-                    String thisGenre = newAlbums.getString(4);
-                    int dateInt = Integer.parseInt(thisDate);
-                    int genreInt = Integer.parseInt(thisGenre);
-                    ParseObject newAlbum = new ParseObject("TestObject");
-                    newAlbum.put("album_name", thisTitle);
-                    newAlbum.put("artist_name", thisArtist);
-                    newAlbum.put("album_year", dateInt);
-                    newAlbum.put("genre_code", genreInt);
-                    newAlbum.saveInBackground();
-                } while (newAlbums.moveToNext());
+            do {
+            	String thisAlbum = newAlbums.getString(1);
+                        NSString *thisArtist = [thisAlbum objectForKey:@"artist"];
+                        NSString *thisDate = [thisAlbum objectForKey:@"date"];
+                        NSString *thisGenre = [thisAlbum objectForKey:@"genre"];
+                        
+                        NSNumberFormatter *nf = [[NSNumberFormatter alloc] init];
+                        [nf setNumberStyle:NSNumberFormatterDecimalStyle];
+                        NSNumber *dateNumber = [nf numberFromString:thisDate];
+                        NSNumber *genreNumber = [nf numberFromString:thisGenre];
+                        
+                        PFObject *albumSave = [PFObject objectWithClassName:@"TestObject"];
+                        albumSave[@"album_name"] = thisTitle;
+                        albumSave[@"artist_name"] = thisArtist;
+                        albumSave[@"album_year"] = dateNumber;
+                        albumSave[@"genre_code"] = genreNumber;
+                        [albumSave saveInBackground];
+                arrayOfNames.add(thisCursor.getString(0));
+                if (role !=0)
+                {
+                	arrayOfRoles.add(className);
+                } else
+                {
+                	arrayOfRoles.add(thisCursor.getString(1));
+                }
+                arrayOfPrices.add(thisCursor.getString(2));
+            } while (thisCursor.moveToNext());
+              
             }
-        }
-            for (int x = 0; x < newAlbums.getCount(); x++)
-            {
+        }       
                 
-               
-                PFObject *albumSave = [PFObject objectWithClassName:@"TestObject"];
-                albumSave[@"album_name"] = thisTitle;
-                albumSave[@"artist_name"] = thisArtist;
-                albumSave[@"album_year"] = dateNumber;
-                albumSave[@"genre_code"] = genreNumber;
-                [albumSave saveInBackground];
            
     }
     

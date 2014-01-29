@@ -8861,3 +8861,23 @@ Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product com.android.
 
 !ENTRY org.eclipse.core.net 1 0 2014-01-27 21:06:18.941
 !MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+!SESSION 2014-01-28 20:14:43.110 -----------------------------------------------
+eclipse.buildId=v22.0.1-685705
+java.version=1.6.0_65
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -keyring /Users/scottcaruso/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -data /Users/scottcaruso/Desktop/Schoolwork/Month 26/Week 3 and 4/CPD1401_week4 -product com.android.ide.eclipse.adt.package.product -keyring /Users/scottcaruso/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2014-01-28 20:14:47.079
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+!SESSION 2014-01-28 20:20:31.620 -----------------------------------------------
+eclipse.buildId=v22.0.1-685705
+java.version=1.6.0_65
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -keyring /Users/scottcaruso/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -product com.android.ide.eclipse.adt.package.product -data /Users/scottcaruso/Desktop/Schoolwork/Month 26/Week 3 and 4/CPD1401_week4 -product com.android.ide.eclipse.adt.package.product -keyring /Users/scottcaruso/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2014-01-28 20:20:35.371
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences

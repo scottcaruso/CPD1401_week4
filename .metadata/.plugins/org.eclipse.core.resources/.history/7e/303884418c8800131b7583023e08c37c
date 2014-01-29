@@ -251,7 +251,7 @@ public class MainActivity extends Activity {
     public String retrieveGenreName(String genreCode)
     {
     	int genreInt = Integer.valueOf(genreCode);
-    	String thisGenre = listOfGenres[genreInt-1];
+    	String thisGenre = listOfGenres[genreInt];
     	return thisGenre;
     }
     

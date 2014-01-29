@@ -27,7 +27,7 @@ import com.parse.ParseQuery;
 public class MainActivity extends Activity {
 	
 	public static ArrayAdapter<HashMap<String,String>> masterArrray;
-	public static String[] listOfGenres = {"Modern Rock","Classic Rock"};
+	public static ArrayAdapter<String> listOfGenres;
 	public static ArrayAdapter<String> cloudIDs;
 	public static Cursor masterCursor;
 	public static SQLiteHelper sql;
@@ -251,7 +251,7 @@ public class MainActivity extends Activity {
     public String retrieveGenreName(String genreCode)
     {
     	int genreInt = Integer.valueOf(genreCode);
-    	String thisGenre = listOfGenres[genreInt-1];
+    	String thisGenre = listOfGenres.getItem(genreInt-1);
     	return thisGenre;
     }
     

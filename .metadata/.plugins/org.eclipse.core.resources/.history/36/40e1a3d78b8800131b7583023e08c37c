@@ -252,7 +252,9 @@ public class MainActivity extends Activity {
     {
     	int genreInt = Integer.valueOf(genreCode);
     	String thisGenre = listOfGenres.getItem(genreInt-1);
-    	return thisGenre;
+    	NSString *genreString = [thisGenre objectForKey:@"genre"];
+    	    return genreString;
+    	}
     }
     
   //--Init

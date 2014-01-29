@@ -248,13 +248,6 @@ public class MainActivity extends Activity {
         }
     }
     
-    public String retrieveGenreName(String genreCode)
-    {
-    	int genreInt = Integer.valueOf(genreCode);
-    	String thisGenre = listOfGenres.getItem(genreInt-1);
-    	return thisGenre;
-    }
-    
   //--Init
     int myvar = 12;
 

@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -171,41 +170,19 @@ public class MainActivity extends Activity {
                     newAlbum.saveInBackground();
                 } while (newAlbums.moveToNext());
             }
-        }  
+        }
+            for (int x = 0; x < newAlbums.getCount(); x++)
+            {
+                
+               
+                PFObject *albumSave = [PFObject objectWithClassName:@"TestObject"];
+                albumSave[@"album_name"] = thisTitle;
+                albumSave[@"artist_name"] = thisArtist;
+                albumSave[@"album_year"] = dateNumber;
+                albumSave[@"genre_code"] = genreNumber;
+                [albumSave saveInBackground];
+           
     }
     
-    public void pushEditedItemsToCloud()
-    {
-    	Cursor newAlbums = sql.getEditedItems();
-        if (newAlbums.getCount() > 0)
-        {
-            if (newAlbums.moveToFirst()) 
-            {
-                do {
-                	String thisID = newAlbums.getString(0);
-                	final String thisTitle = newAlbums.getString(1);
-                    final String thisArtist = newAlbums.getString(2);
-                    String thisDate = newAlbums.getString(3);
-                    String thisGenre = newAlbums.getString(4);
-                    final int dateInt = Integer.parseInt(thisDate);
-                    final int genreInt = Integer.parseInt(thisGenre);
-                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Test Object");
-                    
-                    query.getInBackground(thisID, new GetCallback<ParseObject>() {
-                    	public void done(ParseObject thisAlbum, ParseException e) {
-                    		if (e == null) {
-                       
-                            thisAlbum.put("album_name", thisTitle);
-                            thisAlbum.put("artist_name", thisArtist);
-                            thisAlbum.put("album_year", dateInt);
-                            thisAlbum.put("genre_code", genreInt);
-                            thisAlbum.saveInBackground();
-                    		}
-                    	}
-                    });
-                } while (newAlbums.moveToNext());
-            }
-        }  
-    }
     
 }

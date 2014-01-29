@@ -81,21 +81,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	      
 	   }
 	 
-	 public Cursor getEditedItems() {
-
-	       String query = "SELECT "+TABLE_CHAMPS+"."+KEY_NAME+","+TABLE_ROLES+"."+
-	       KEY_ROLE+","+TABLE_CHAMPS+"."+KEY_COST+" FROM " + TABLE_CHAMPS + " JOIN " +
-	       TABLE_ROLES+" ON "+ TABLE_CHAMPS+"."+KEY_ROLE+"="+TABLE_ROLES+"."+KEY_ID+";";
-	       
-	       Log.i("Info",query);
-	 
-	       SQLiteDatabase db = this.getWritableDatabase();
-	       Cursor cursor = db.rawQuery(query, null);
-	       	        
-	       return cursor;
-	      
-	   }
-	 
 	 public Cursor getSpecificRole(int roleID) {
 		 
 		 	String query = "SELECT "+KEY_NAME+","+KEY_ROLE+","+KEY_COST+" FROM "+TABLE_CHAMPS+" WHERE "+KEY_ROLE+"="

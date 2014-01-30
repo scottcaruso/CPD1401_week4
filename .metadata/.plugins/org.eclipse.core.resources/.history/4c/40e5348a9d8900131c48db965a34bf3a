@@ -339,13 +339,12 @@ public class MainActivity extends Activity {
     
     public String retrieveGenreCode(String genreName)
     {
-    	String genreID = "";
         for (int x = 0; x < listOfGenres.size(); x++)
         {
             String thisGenre = listOfGenres.get(x);
-            if (genreName.contentEquals(thisGenre))
+            if (genreName == thisGenre)
             {
-            	genreID = String.valueOf(x+1);
+            	String genreID = String.valueOf(x+1);
             }
         }
         return genreID;

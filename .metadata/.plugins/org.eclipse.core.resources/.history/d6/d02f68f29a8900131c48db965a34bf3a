@@ -339,16 +339,16 @@ public class MainActivity extends Activity {
     
     public String retrieveGenreCode(String genreName)
     {
-    	String genreID = "";
         for (int x = 0; x < listOfGenres.size(); x++)
         {
             String thisGenre = listOfGenres.get(x);
-            if (genreName.contentEquals(thisGenre))
+            if (genreName == thisGenre)
             {
-            	genreID = String.valueOf(x+1);
+            	String genreID = String.valueOf(x+1);
+            	return genreID;
             }
         }
-        return genreID;
+        return "";
     }
     
     public void buttonClickers()
@@ -361,18 +361,39 @@ public class MainActivity extends Activity {
 				String buttonText = b.getText().toString();
 				if (buttonText.contentEquals("Add"))
 				{
-					albumNameField.setEnabled(true);
-					artistNameField.setEnabled(true);
-					yearButton.setEnabled(true);
-					genreButton.setEnabled(true);
-					albumNameField.setText("");
-					artistNameField.setText("");
-					yearButton.setText("2014");
-					genreButton.setText("Modern Rock");
-					buttonOne.setText("Add Item");
-					buttonThree.setText("Cancel");
-					buttonTwo.setEnabled(false);
-					buttonFour.setEnabled(false);
+					String albumNameString = albumNameField.getText().toString();
+					String artistNameString = artistNameField.getText().toString();
+			    	if (albumNameString.contentEquals("") || artistNameString.contentEquals(""))
+			    	{
+			    		Toast warning = Toast.makeText(MainActivity.this, "You need to specify both an album name and an artist name to save data to the database.", Toast.LENGTH_SHORT);
+			    		warning.show();
+			    	} else {
+						HashMap<String,String> currentData = new HashMap<String,String>();
+						currentData.put("title", albumNameField.getText().toString());
+						currentData.put("artist", artistNameField.getText().toString());
+						currentData.put("date", yearButton.getText().toString());
+						String genreValueString = retrieveGenreCode(genreButton.getText().toString());
+						currentData.put("genre", genreValueString);
+			    		String returnString = "INSERT INTO albums (database_id,album_name,artist_name," +
+			    				"album_year,genre_code) VALUES (\"NEW\",\""+albumNameString+"\",\""
+			    				+artistNameString+"\","+yearString+","+albumGenreId+");";
+			    		sql.addItemToLocalDatabase(returnString);
+			    		
+			    		//Add this object to the current master Cursor
+			    		Cursor newList = sql.getAllAlbums();
+			    		reloadListView(newList);
+						albumNameField.setEnabled(false);
+						artistNameField.setEnabled(false);
+						yearButton.setEnabled(false);
+						genreButton.setEnabled(false);
+						buttonOne.setText("Add");
+						buttonThree.setText("Delete");
+						buttonTwo.setEnabled(true);
+						buttonThree.setEnabled(true);
+						buttonFour.setEnabled(true);
+						Cursor updatedList = sql.getAllAlbums();
+						reloadListView(updatedList);
+			    	}
 				} else if (buttonText.contentEquals("Confirm"))
 				{
 					HashMap<String,String> currentData = new HashMap<String,String>();
@@ -392,40 +413,13 @@ public class MainActivity extends Activity {
 					buttonThree.setEnabled(true);
 					buttonFour.setEnabled(true);
 					Cursor updatedList = sql.getAllAlbums();
-					reloadListView(updatedList);		
+					reloadListView(updatedList);
+					
 				} else if (buttonText.contentEquals("Add Item"))
 				{
-					String albumNameString = albumNameField.getText().toString();
-					String artistNameString = artistNameField.getText().toString();
-			    	if (albumNameString.contentEquals("") || artistNameString.contentEquals(""))
-			    	{
-			    		Toast warning = Toast.makeText(MainActivity.this, "You need to specify both an album name and an artist name to save data to the database.", Toast.LENGTH_SHORT);
-			    		warning.show();
-			    	} else {
-			    		String yearString = yearButton.getText().toString();
-			    		String genreString = genreButton.getText().toString();
-			    		String genreValueString = retrieveGenreCode(genreString);
-			    		String returnString = "INSERT INTO albums (database_id,album_name,artist_name," +
-			    				"album_year,genre_code,is_edited) VALUES (\"NEW\",\""+albumNameString+"\",\""
-			    				+artistNameString+"\","+yearString+","+genreValueString+",0);";
-			    		sql.addItemToLocalDatabase(returnString);
-			    		
-			    		//Add this object to the current master Cursor
-			    		Cursor newList = sql.getAllAlbums();
-			    		reloadListView(newList);
-						albumNameField.setEnabled(false);
-						artistNameField.setEnabled(false);
-						yearButton.setEnabled(false);
-						genreButton.setEnabled(false);
-						buttonOne.setText("Add");
-						buttonThree.setText("Delete");
-						buttonTwo.setEnabled(true);
-						buttonThree.setEnabled(true);
-						buttonFour.setEnabled(true);
-						Cursor updatedList = sql.getAllAlbums();
-						reloadListView(updatedList);
-			    	}
+					
 				}
+				
 			}
 		});
     	

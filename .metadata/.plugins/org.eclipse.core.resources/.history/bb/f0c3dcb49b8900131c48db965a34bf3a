@@ -339,16 +339,16 @@ public class MainActivity extends Activity {
     
     public String retrieveGenreCode(String genreName)
     {
-    	String genreID = "";
         for (int x = 0; x < listOfGenres.size(); x++)
         {
             String thisGenre = listOfGenres.get(x);
-            if (genreName.contentEquals(thisGenre))
+            if (genreName == thisGenre)
             {
-            	genreID = String.valueOf(x+1);
+            	String genreID = String.valueOf(x+1);
+            	return genreID;
             }
         }
-        return genreID;
+        return "";
     }
     
     public void buttonClickers()
@@ -367,8 +367,6 @@ public class MainActivity extends Activity {
 					genreButton.setEnabled(true);
 					albumNameField.setText("");
 					artistNameField.setText("");
-					yearButton.setText("2014");
-					genreButton.setText("Modern Rock");
 					buttonOne.setText("Add Item");
 					buttonThree.setText("Cancel");
 					buttonTwo.setEnabled(false);
@@ -403,8 +401,7 @@ public class MainActivity extends Activity {
 			    		warning.show();
 			    	} else {
 			    		String yearString = yearButton.getText().toString();
-			    		String genreString = genreButton.getText().toString();
-			    		String genreValueString = retrieveGenreCode(genreString);
+			    		String genreValueString = retrieveGenreCode(genreButton.getText().toString());
 			    		String returnString = "INSERT INTO albums (database_id,album_name,artist_name," +
 			    				"album_year,genre_code,is_edited) VALUES (\"NEW\",\""+albumNameString+"\",\""
 			    				+artistNameString+"\","+yearString+","+genreValueString+",0);";
@@ -424,8 +421,8 @@ public class MainActivity extends Activity {
 						buttonFour.setEnabled(true);
 						Cursor updatedList = sql.getAllAlbums();
 						reloadListView(updatedList);
-			    	}
 				}
+				
 			}
 		});
     	

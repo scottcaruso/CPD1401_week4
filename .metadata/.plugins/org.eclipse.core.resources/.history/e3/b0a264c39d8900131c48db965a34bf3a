@@ -343,7 +343,7 @@ public class MainActivity extends Activity {
         for (int x = 0; x < listOfGenres.size(); x++)
         {
             String thisGenre = listOfGenres.get(x);
-            if (genreName.contentEquals(thisGenre))
+            if (genreName == thisGenre)
             {
             	genreID = String.valueOf(x+1);
             }

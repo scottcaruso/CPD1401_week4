@@ -1,6 +1,6 @@
 package com.scottcaruso.personalmusicalbumdatabase;
 
-import java.awt.font.NumericShaper;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -26,9 +27,9 @@ import com.parse.ParseQuery;
 
 public class MainActivity extends Activity {
 	
-	public static ArrayAdapter<HashMap<String,String>> masterArrray;
+	public static ArrayList<HashMap<String,String>> masterArray;
 	public static String[] listOfGenres = {"Modern Rock","Classic Rock"};
-	public static ArrayAdapter<String> cloudIDs;
+	public static ArrayList<String> cloudIDs;
 	public static Cursor masterCursor;
 	public static SQLiteHelper sql;
 	public static ListView listView;
@@ -37,6 +38,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        masterArray = new ArrayList<HashMap<String,String>>();
+        cloudIDs = new ArrayList<String>();
+        sql = new SQLiteHelper(this);
+        sql.createDB();
         Parse.initialize(this, "GSJTIddEqF4RT6PmWi6VgKx63b5DWCDVDNRZyR9m", "O17apZByYdFumITsEpo8ndtjfFQ7MIJ3C7U0SYxt");
         retrieveAllAlbums("Startup");
         
@@ -63,16 +68,15 @@ public class MainActivity extends Activity {
 		   @Override
 	       public void done(List<ParseObject> albums, ParseException e) {
 	           if (e == null) {
-	               Log.d("score", "Retrieved " + albums.size() + " scores");
 	               // Put the objects into the MasterList to create the first Master List.
 	               for (ParseObject album : albums) {
 		               HashMap<String,String> thisAlbum = new HashMap<String,String>();
 		               thisAlbum.put("db_id", album.getObjectId());
-		               thisAlbum.put("albumName", album.getString("album"));
-		               thisAlbum.put("artistName", album.getString("artist"));
-		               thisAlbum.put("date", album.getString("date"));
-		               thisAlbum.put("genre", album.getString("genre"));
-		               masterArrray.add(thisAlbum);
+		               thisAlbum.put("albumName", album.getString("album_name"));
+		               thisAlbum.put("artistName", album.getString("artist_name"));
+		               thisAlbum.put("date", String.valueOf(album.getInt("album_year")));
+		               thisAlbum.put("genre", String.valueOf(album.getInt("genre_code")));
+		               masterArray.add(thisAlbum);
 		               cloudIDs.add(album.getObjectId());
 	               }
 	               if (whatWeAreDoing == "Sync Data") {
@@ -96,18 +100,18 @@ public class MainActivity extends Activity {
     	int numberOfItems = currentDB.getCount();
     	if (numberOfItems == 0)
     	{
-    		int numberOfRecords = masterArrray.getCount();
+    		int numberOfRecords = masterArray.size();
             for (int x = 0; x < numberOfRecords; x++)
             {
             
-                String stringToAdd = createInsertString(masterArrray.getItem(x));
+                String stringToAdd = createInsertString(masterArray.get(x));
                 sql.addItemToLocalDatabase(stringToAdd);
             }
     	} else {
     		Log.i("Info","Local data already exists. No need to populate database.");
     	}
     	currentDB = sql.getAllAlbums();
-    	reloadListView();
+    	reloadListView(currentDB);
     }
     
     public String createInsertString(HashMap<String,String> object)
@@ -119,17 +123,43 @@ public class MainActivity extends Activity {
     	String albumDate = object.get("date");
     	
     	String sqlString = "INSERT INTO albums (database_id,album_name,artist_name,album_year," +
-    			"genre_code,is_edited) VALUES(db_id=\""+albumID+"\",albumName=\""+albumName+"\"" +
-    					",artist_name=\""+albumArtist+"\",album_year=\""+albumDate+"\"" +
-    							",album_genre=\""+albumGenre+"\",is_edited=0;";
+    			"genre_code,is_edited) VALUES (\""+albumID+"\",\""+albumName+"\"," +
+    					"\""+albumArtist+"\",\""+albumDate+"\"" +
+    							","+albumGenre+",0);";
     	return sqlString;
     }
     
     //Table population functions
     
-    public void reloadListView()
+    @SuppressWarnings("null")
+	public void reloadListView(Cursor thisCursor)
     {
-    	
+    	ArrayList<String> arrayOfAlbums = new ArrayList<String>();
+    	ArrayList<String> arrayOfArtists = new ArrayList<String>();
+        if (thisCursor.moveToFirst()) {
+            do {
+                arrayOfAlbums.add(thisCursor.getString(2));
+                arrayOfArtists.add(thisCursor.getString(3));
+            } while (thisCursor.moveToNext());
+        }
+        
+        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+        for (int x = 0; x < arrayOfAlbums.size(); x++) 
+        {
+            Map<String, String> dataItem = new HashMap<String, String>(2);
+            dataItem.put("album", arrayOfAlbums.get(x));
+            dataItem.put("artist", arrayOfArtists.get(x));
+            data.add(dataItem);
+        }
+        
+        SimpleAdapter adapter = new SimpleAdapter(this, data,
+                                                  android.R.layout.simple_list_item_2,
+                                                  new String[] {"album", "artist"},
+                                                  new int[] {android.R.id.text1,
+                                                             android.R.id.text2});
+        
+        listView = (ListView) findViewById(R.id.listView1);    	
+    	listView.setAdapter(adapter);
     }
     
     public void addItemToLocalDatabase()
@@ -148,9 +178,11 @@ public class MainActivity extends Activity {
     		String returnString = "INSERT INTO albums (database_id,album_name,artist_name," +
     				"album_year,genre_code) VALUES (\"NEW\",\""+albumNameString+"\",\""
     				+artistNameString+"\","+yearString+","+albumGenreId+");";
-    		sql.addItemToDatabase(returnString);
+    		sql.addItemToLocalDatabase(returnString);
+    		
     		//Add this object to the current master Cursor
-    		reloadListView();
+    		Cursor newList = sql.getAllAlbums();
+    		reloadListView(newList);
     	}
     }
     
@@ -283,7 +315,7 @@ public class MainActivity extends Activity {
         return "";
     }
     
-  //--Init
+  /*--Init
     int myvar = 12;
 
 
@@ -291,6 +323,6 @@ public class MainActivity extends Activity {
     SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);  
     SharedPreferences.Editor editor = preferences.edit();
     editor.putInt("var1", myvar);
-    editor.commit();
+    editor.commit();*/
     
 }

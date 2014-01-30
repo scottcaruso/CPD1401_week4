@@ -23,14 +23,14 @@
 	        android:text="Add" />
 
 	    <Button
-	        android:id="@+id/button1"
+	        android:id="@+id/button2"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.33"
 	        android:text="Edit" />
 
 	    <Button
-	        android:id="@+id/button1"
+	        android:id="@+id/button3"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="0.33"
@@ -50,7 +50,7 @@
 	        android:layout_weight="1" >
 	        
 		    <ImageView
-		        android:id="@+id/imageView1"
+		        android:id="@+id/albumArt"
 		        android:layout_width="147dp"
 		        android:layout_height="152dp"
 		        android:contentDescription="albumimage"
@@ -65,7 +65,7 @@
 	        android:layout_weight="2" >
 
 	        <EditText
-	            android:id="@+id/editText1"
+	            android:id="@+id/albumfield"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content" >
 
@@ -73,19 +73,19 @@
 	        </EditText>
 
 	        <EditText
-	            android:id="@+id/editText2"
+	            android:id="@+id/artistfield"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content" />
 
 	        <Button
-	            android:id="@+id/button2"
+	            android:id="@+id/yearbutton"
 	            android:layout_width="114dp"
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="right"
 	            android:text="Button" />
 
 	        <Button
-	            android:id="@+id/button3"
+	            android:id="@+id/genrebutton"
 	            android:layout_width="114dp"
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="right"

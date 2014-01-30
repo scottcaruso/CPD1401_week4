@@ -12,9 +12,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -28,11 +33,16 @@ import com.parse.ParseQuery;
 public class MainActivity extends Activity {
 	
 	public static ArrayList<HashMap<String,String>> masterArray;
-	public static String[] listOfGenres = {"Modern Rock","Classic Rock"};
+	public static ArrayList<String> listOfGenres;
 	public static ArrayList<String> cloudIDs;
-	public static Cursor masterCursor;
+	public static Cursor currentDB;
 	public static SQLiteHelper sql;
 	public static ListView listView;
+	public static TextView albumNameField;
+	public static TextView artistNameField;
+	public static Button yearButton;
+	public static Button genreButton;
+	public static String currentID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +50,19 @@ public class MainActivity extends Activity {
         
         masterArray = new ArrayList<HashMap<String,String>>();
         cloudIDs = new ArrayList<String>();
+        listOfGenres = new ArrayList<String>();
         sql = new SQLiteHelper(this);
         sql.createDB();
         Parse.initialize(this, "GSJTIddEqF4RT6PmWi6VgKx63b5DWCDVDNRZyR9m", "O17apZByYdFumITsEpo8ndtjfFQ7MIJ3C7U0SYxt");
         retrieveAllAlbums("Startup");
+        retrieveAllGenres();
         
         setContentView(R.layout.activity_main);
+        //Assign UI elements
+        albumNameField = (TextView) findViewById(R.id.albumfield);
+        artistNameField = (TextView) findViewById(R.id.artistfield);
+        yearButton = (Button) findViewById(R.id.yearbutton);
+        genreButton = (Button) findViewById(R.id.genrebutton);
         
     }
 
@@ -93,10 +110,29 @@ public class MainActivity extends Activity {
 	       }	
 	   });
     }
+   
+   public void retrieveAllGenres()
+   {
+	   ParseQuery<ParseObject> query = ParseQuery.getQuery("MusicGenres");
+	   query.findInBackground(new FindCallback<ParseObject>() {
+		   
+		   @Override
+	       public void done(List<ParseObject> genres, ParseException e) {
+	           if (e == null) {
+	               // Put the objects into the MasterList to create the first Master List.
+	               for (ParseObject genre : genres) {
+	            	   listOfGenres.add(genre.getString("genre_name"));
+	               }
+	           } else {
+	               Log.d("score", "Error: " + e.getMessage());
+	           }
+	       }	
+	   });
+   }
 	               
     public void fillDatabaseIfEmpty()
     {
-    	Cursor currentDB = sql.getAllAlbums();
+    	currentDB = sql.getAllAlbums();
     	int numberOfItems = currentDB.getCount();
     	if (numberOfItems == 0)
     	{
@@ -131,7 +167,6 @@ public class MainActivity extends Activity {
     
     //Table population functions
     
-    @SuppressWarnings("null")
 	public void reloadListView(Cursor thisCursor)
     {
     	ArrayList<String> arrayOfAlbums = new ArrayList<String>();
@@ -160,7 +195,34 @@ public class MainActivity extends Activity {
         
         listView = (ListView) findViewById(R.id.listView1);    	
     	listView.setAdapter(adapter);
+    	listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int item,
+					long id) {
+				
+				Log.i("Info","We clicked " + String.valueOf(item));
+				updateUIElements(currentDB, item);
+			}
+		});
+    	
     }
+	
+	public void updateUIElements(Cursor cursor, int row)
+	{
+        if (cursor.moveToPosition(row)) {
+        	String albumName = cursor.getString(2);
+        	String artistName = cursor.getString(3);
+        	String yearValue = cursor.getString(4);
+        	String genreValue = cursor.getString(5);
+        	String genreNameValue = retrieveGenreName(genreValue);
+        	albumNameField.setText(albumName);
+        	artistNameField.setText(artistName);
+        	yearButton.setText(yearValue);
+        	genreButton.setText(genreNameValue);
+        	currentID = cursor.getString(1);
+        }
+	}
     
     public void addItemToLocalDatabase()
     {
@@ -297,15 +359,15 @@ public class MainActivity extends Activity {
     public String retrieveGenreName(String genreCode)
     {
     	int genreInt = Integer.valueOf(genreCode);
-    	String thisGenre = listOfGenres[genreInt-1];
+    	String thisGenre = listOfGenres.get(genreInt-1);
     	return thisGenre;
     }
     
     public String retrieveGenreCode(String genreName)
     {
-        for (int x = 0; x < listOfGenres.length; x++)
+        for (int x = 0; x < listOfGenres.size(); x++)
         {
-            String thisGenre = listOfGenres[x];
+            String thisGenre = listOfGenres.get(x);
             if (genreName == thisGenre)
             {
             	String genreID = String.valueOf(x+1);

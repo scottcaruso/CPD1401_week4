@@ -1,0 +1,115 @@
+package com.scottcaruso.personalmusicalbumdatabase;
+
+import java.util.HashMap;
+import java.util.List;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+public class SQLiteHelper extends SQLiteOpenHelper {
+
+	private static final int DB_VER = 1;
+	private static final String DB_NAME = "AlbumDB";
+	
+	public SQLiteHelper(Context context){
+		super(context, DB_NAME, null, DB_VER);
+	}
+	
+	 @Override
+	 public void onCreate(SQLiteDatabase db) {
+	 
+	 }
+	 
+	 @Override
+	 public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	        
+		 db.execSQL("DROP TABLE IF EXISTS albums;");
+	 
+		 this.onCreate(db);
+	 }
+	 
+	 public void createDB() {
+		 SQLiteDatabase db = this.getWritableDatabase();
+		 String CREATE_TABLE_ALBUMS = "CREATE TABLE IF NOT EXISTS albums (id INTEGER PRIMARY KEY," +
+			 		"database_id varchar(50), album_name varchar(50), artist_name varchar(50), album_year INTEGER, genre_code INTEGER, is_edited INTEGER);";
+		 String CREATE_TABLE_GENRES = "CREATE TABLE IF NOT EXISTS genres (id INTEGER PRIMARY KEY," +
+			 		"genre_id INTEGER, role varchar(20));";
+		 db.execSQL(CREATE_TABLE_ALBUMS);
+		 db.execSQL(CREATE_TABLE_GENRES);
+	 }
+	 
+	 public Cursor getAllAlbums() {
+	       String query = "SELECT * FROM albums;";
+	 
+	       SQLiteDatabase db = this.getWritableDatabase();
+	       Cursor cursor = db.rawQuery(query, null);
+	       	        
+	       return cursor;  
+	   }
+	 
+	 public void addItemToLocalDatabase(String sqlString)
+	 {
+		 SQLiteDatabase db = this.getWritableDatabase();
+		 
+		 db.execSQL(sqlString);
+	 }
+	 
+	 public Cursor getNewAlbums() {
+	       String query = "SELECT * FROM albums WHERE database_id=\"NEW\";";
+
+	       SQLiteDatabase db = this.getWritableDatabase();
+	       Cursor cursor = db.rawQuery(query, null);
+	       	        
+	       return cursor;
+	   }
+	 
+	 public Cursor getEditedItems() {
+
+	       String query = "SELECT * FROM albums WHERE is_edited=1;";
+	 
+	       SQLiteDatabase db = this.getWritableDatabase();
+	       Cursor cursor = db.rawQuery(query, null);
+	       	        
+	       return cursor;    
+	   }
+	 
+	 public void emptyDatabase() {
+		 
+		 String query = "DELETE FROM albums;VACUUM;";
+		 SQLiteDatabase db = this.getWritableDatabase();
+		 db.execSQL(query);
+	 }
+	 
+	 public void modifyItemInDatabase(String dbID, HashMap<String,String> data)
+	 {
+		 String newTitle = data.get("title");
+		 String newArtist = data.get("artist");
+		 String newYear = data.get("date");
+		 String newGenre = data.get("genre");
+		 String sqlString = "UPDATE albums SET album_name=\""+newTitle+"\",artist_name=\""+newArtist+
+				",album_year="+newYear+",genre_code="+newGenre+",is_edited=1 WHERE database_id=\""+dbID+"\");";
+		 
+		 SQLiteDatabase db = this.getWritableDatabase();
+		 db.execSQL(sqlString); 
+	 }
+	 
+	 public void removeItemInDatabase(String dbID)
+	 {
+		 String sqlString = "DELETE FROM albums WHERE database_id=\""+dbID+"\";";
+		 
+		 SQLiteDatabase db = this.getWritableDatabase();
+		 db.execSQL(sqlString); 
+	 }
+	 
+	 public Cursor getFilteredResults(int filterParam) {
+	       String query = "SELECT * FROM albums WHERE genre_code="+filterParam+";";
+	 
+	       SQLiteDatabase db = this.getWritableDatabase();
+	       Cursor cursor = db.rawQuery(query, null);
+	       	        
+	       return cursor;  
+	   } 
+}

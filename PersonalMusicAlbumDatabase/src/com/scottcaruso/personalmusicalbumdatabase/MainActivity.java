@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -42,6 +43,10 @@ public class MainActivity extends Activity {
 	public static TextView artistNameField;
 	public static Button yearButton;
 	public static Button genreButton;
+	public static Button buttonOne;
+	public static Button buttonTwo;
+	public static Button buttonThree;
+	public static Button buttonFour;
 	public static String currentID;
 
     @Override
@@ -63,6 +68,11 @@ public class MainActivity extends Activity {
         artistNameField = (TextView) findViewById(R.id.artistfield);
         yearButton = (Button) findViewById(R.id.yearbutton);
         genreButton = (Button) findViewById(R.id.genrebutton);
+        buttonOne = (Button) findViewById(R.id.buttonPos1);
+        buttonTwo = (Button) findViewById(R.id.buttonPos2);
+        buttonThree = (Button) findViewById(R.id.buttonPos3);
+        buttonFour = (Button) findViewById(R.id.buttonPos4);
+        buttonClickers();
         
     }
 
@@ -165,8 +175,6 @@ public class MainActivity extends Activity {
     	return sqlString;
     }
     
-    //Table population functions
-    
 	public void reloadListView(Cursor thisCursor)
     {
     	ArrayList<String> arrayOfAlbums = new ArrayList<String>();
@@ -203,6 +211,8 @@ public class MainActivity extends Activity {
 				
 				Log.i("Info","We clicked " + String.valueOf(item));
 				updateUIElements(currentDB, item);
+				buttonTwo.setVisibility(View.VISIBLE);
+				buttonThree.setVisibility(View.VISIBLE);
 			}
 		});
     	
@@ -246,18 +256,6 @@ public class MainActivity extends Activity {
     		Cursor newList = sql.getAllAlbums();
     		reloadListView(newList);
     	}
-    }
-    
-    public void activateEditButtons()
-    {
-    	//This function will modify the UI to activate the Commit and Cancel buttons, as
-    	//well as hide the other interface functions
-    }
-    
-    public void deactivateEditButtons()
-    {
-    	//This function will modify the UI to remove the Commit and Cancel buttons, as
-    	//well as hide the other interface functions.
     }
     
     public void pushNewItemsToCloud()
@@ -375,6 +373,94 @@ public class MainActivity extends Activity {
             }
         }
         return "";
+    }
+    
+    public void buttonClickers()
+    {
+    	buttonOne.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Button b = (Button) v;
+				if (b.getText().toString() == "Add")
+				{
+					
+				} else if (b.getText().toString() == "Confirm")
+				{
+					HashMap<String,String> currentData = new HashMap<String,String>();
+					currentData.put("title", albumNameField.getText().toString());
+					currentData.put("artist", artistNameField.getText().toString());
+					currentData.put("date", yearButton.getText().toString());
+					String genreValueString = retrieveGenreCode(genreButton.getText().toString());
+					currentData.put("genre", genreValueString);
+					sql.modifyItemInDatabase(currentID, currentData);
+					albumNameField.setEnabled(false);
+					artistNameField.setEnabled(false);
+					yearButton.setEnabled(false);
+					genreButton.setEnabled(false);
+					buttonOne.setText("Add");
+					buttonThree.setText("Delete");
+					buttonTwo.setEnabled(true);
+					buttonThree.setEnabled(true);
+					Cursor updatedList = sql.getAllAlbums();
+					reloadListView(updatedList);
+					
+				} else if (b.getText().toString() == "Add Item")
+				{
+					
+				}
+				
+			}
+		});
+    	
+    	buttonTwo.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Button b = (Button) v;
+				String buttonText = b.getText().toString();
+				if (buttonText.contentEquals("Edit"))
+				{
+					albumNameField.setEnabled(true);
+					artistNameField.setEnabled(true);
+					yearButton.setEnabled(true);
+					genreButton.setEnabled(true);
+					buttonOne.setText("Confirm");
+					buttonThree.setText("Cancel");
+					buttonTwo.setEnabled(false);
+					buttonFour.setEnabled(false);
+					
+				}
+				
+			}
+		});
+    	
+    	buttonThree.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Button b = (Button) v;
+				String buttonText = b.getText().toString();
+				if (buttonText.contentEquals("Delete"))
+				{
+					sql.removeItemInDatabase(currentID);
+					Cursor updatedList = sql.getAllAlbums();
+					reloadListView(updatedList);
+				}
+				
+				
+			}
+		});
+    	
+    	buttonFour.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Button b = (Button) v;
+				// TODO Auto-generated method stub
+				
+			}
+		});
     }
     
   /*--Init

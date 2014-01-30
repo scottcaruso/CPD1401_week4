@@ -90,7 +90,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		 String newYear = data.get("date");
 		 String newGenre = data.get("genre");
 		 String sqlString = "UPDATE albums SET album_name=\""+newTitle+"\",artist_name=\""+newArtist+
-				"\",album_year=\""+newYear+"\",album_genre=\""+newGenre+"\",is_edited=1 WHERE database_id=\""+dbID+"\");";
+				"\",album_year="+newYear+",genre_code="+newGenre+",is_edited=1 WHERE database_id=\""+dbID+"\";";
 		 
 		 SQLiteDatabase db = this.getWritableDatabase();
 		 db.execSQL(sqlString); 

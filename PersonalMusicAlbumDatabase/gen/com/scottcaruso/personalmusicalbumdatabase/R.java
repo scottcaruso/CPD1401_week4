@@ -32,9 +32,9 @@ public final class R {
         public static final int buttonPos2=0x7f080001;
         public static final int buttonPos3=0x7f080002;
         public static final int buttonPos4=0x7f080003;
-        public static final int genrebutton=0x7f080008;
+        public static final int genrespinner=0x7f080008;
         public static final int listView1=0x7f080009;
-        public static final int yearbutton=0x7f080007;
+        public static final int yearspinner=0x7f080007;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

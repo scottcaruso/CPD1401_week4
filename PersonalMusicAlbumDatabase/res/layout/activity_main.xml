@@ -86,21 +86,20 @@
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content" />
 
-	        <Button
-	            android:id="@+id/yearbutton"
-	            android:enabled="false"
+	        <Spinner
+	            android:id="@+id/yearspinner"
 	            android:layout_width="114dp"
 	            android:layout_height="wrap_content"
-	            android:layout_gravity="right"
-	            android:text="Button" />
+	            android:clickable="false"
+	            android:visibility="invisible"
+	            android:layout_gravity="right" />
 
-	        <Button
-	            android:id="@+id/genrebutton"
-	            android:enabled="false"
+	        <Spinner
+	            android:id="@+id/genrespinner"
 	            android:layout_width="114dp"
 	            android:layout_height="wrap_content"
-	            android:layout_gravity="right"
-	            android:text="Button" />
+	            android:visibility="invisible"
+	            android:layout_gravity="right" />
 	        
 	    </LinearLayout>
 	

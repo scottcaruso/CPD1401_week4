@@ -7,8 +7,6 @@ import java.util.Map;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.Menu;
@@ -28,7 +26,6 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
-import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -272,10 +269,10 @@ public class MainActivity extends Activity {
             if (newAlbums.moveToFirst()) 
             {
                 do {
-                	String thisTitle = newAlbums.getString(1);
-                    String thisArtist = newAlbums.getString(2);
-                    String thisDate = newAlbums.getString(3);
-                    String thisGenre = newAlbums.getString(4);
+                	String thisTitle = newAlbums.getString(2);
+                    String thisArtist = newAlbums.getString(3);
+                    String thisDate = newAlbums.getString(4);
+                    String thisGenre = newAlbums.getString(5);
                     int dateInt = Integer.parseInt(thisDate);
                     int genreInt = Integer.parseInt(thisGenre);
                     ParseObject newAlbum = new ParseObject("TestObject");
@@ -297,11 +294,11 @@ public class MainActivity extends Activity {
             if (newAlbums.moveToFirst()) 
             {
                 do {
-                	String thisID = newAlbums.getString(0);
-                	final String thisTitle = newAlbums.getString(1);
-                    final String thisArtist = newAlbums.getString(2);
-                    String thisDate = newAlbums.getString(3);
-                    String thisGenre = newAlbums.getString(4);
+                	String thisID = newAlbums.getString(1);
+                	final String thisTitle = newAlbums.getString(2);
+                    final String thisArtist = newAlbums.getString(3);
+                    String thisDate = newAlbums.getString(4);
+                    String thisGenre = newAlbums.getString(5);
                     final int dateInt = Integer.parseInt(thisDate);
                     final int genreInt = Integer.parseInt(thisGenre);
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("Test Object");
@@ -323,41 +320,51 @@ public class MainActivity extends Activity {
         }  
     }
     
-    public void deleteItemsInCloud(Context context)
+    public void deleteItemsInCloud()
     {
-        SharedPreferences preferences = context.getSharedPreferences("Delete", Context.MODE_PRIVATE);
-        String toDelete = preferences.getString("items",null);
-        if (!toDelete.isEmpty())
+    	ArrayList<String> localIDs = new ArrayList<String>();
+    	currentDB = sql.getAllAlbums();
+    	if (currentDB.moveToFirst()) 
         {
-        	if (!toDelete.contains(","))
-        	{
-        		
-        	} else
-        	{
-        		int stringLength = toDelete.length();
-        		int numberOfCommas = 1;
-        		int locationOfPreviousComma = 0;
-        		String comma = ",";
-        		for (int x = 0; x <= stringLength; x++)
-        		{
-        			char thisChar = toDelete.charAt(x);
-        			if (thisChar == comma.charAt(0))
-        			{
-        				String id = toDelete.substring(locationOfPreviousComma, x+1);
-        				ParseQuery<ParseObject> query = ParseQuery.getQuery("TestObject");
-        				query.getInBackground(id, new GetCallback<ParseObject>() {
-                        	public void done(ParseObject thisAlbum, ParseException e) {
-                        		if (e == null) {
-                                thisAlbum.deleteInBackground();
-                        		}
-                        	}
-                        });
-        				locationOfPreviousComma = x+1;
-        				numberOfCommas++;
-        			}
-        		}
-        	}
+            do {
+            	String thisID = currentDB.getString(1);
+            	localIDs.add(thisID);
+            } while (currentDB.moveToNext());
         }
+    	
+    	for (int x = 0; x < cloudIDs.size(); x++)
+    	{
+    		String cloudID = cloudIDs.get(x);
+    		if (localIDs.contains(cloudID))
+    		{
+    			//Do nothing
+    		} else {
+    			ParseQuery<ParseObject> query = ParseQuery.getQuery("TestObject");
+    			query.getInBackground(cloudID, new GetCallback<ParseObject>() {
+    			  public void done(ParseObject object, ParseException e) {
+    			    if (e == null) {
+    			    	object.deleteInBackground();
+    			    }
+    			  }
+    			});
+    		}
+    	}
+    }
+    
+    public void syncWithServer()
+    {
+        //Check to see if there are any new items in the local database and push those
+        pushNewItemsToCloud();
+        
+        //Check to see if there are any items in the local database that have been edited and push those changes
+        pushEditedItemsToCloud();
+        
+        ///Check to see if anything has been deleted from the local database, and delete it from the remote database
+        deleteItemsInCloud();
+        
+        //Sync remote database back down
+        masterArray.clear();
+        retrieveAllAlbums("Sync Data");
     }
     
     public String retrieveGenreName(String genreCode)
@@ -515,9 +522,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Button b = (Button) v;
-				// TODO Auto-generated method stub
-				
+				syncWithServer();
 			}
 		});
     }

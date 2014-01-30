@@ -1,0 +1,588 @@
+package com.scottcaruso.personalmusicalbumdatabase;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+public class MainActivity extends Activity {
+	
+	public static ArrayList<HashMap<String,String>> masterArray;
+	public static ArrayList<String> listOfGenres;
+	public static ArrayList<String> cloudIDs;
+	public static Cursor currentDB;
+	public static SQLiteHelper sql;
+	public static ListView listView;
+	public static TextView albumNameField;
+	public static TextView artistNameField;
+	public static Button buttonOne;
+	public static Button buttonTwo;
+	public static Button buttonThree;
+	public static Button buttonFour;
+	public static String currentID;
+	public static Spinner yearSpinner;
+	public static Spinner genreSpinner;
+	public static String yearString;
+	public static String genreString;
+	
+	public static ArrayList<String> yearsForPicker;
+	public static ArrayList<String> genreList;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        masterArray = new ArrayList<HashMap<String,String>>();
+        cloudIDs = new ArrayList<String>();
+        listOfGenres = new ArrayList<String>();
+        yearsForPicker = new ArrayList<String>();
+        for (int x = 1950; x <= 2014; x++)
+        {
+        	String currentYear = String.valueOf(x);
+        	yearsForPicker.add(currentYear);
+        }
+       
+        sql = new SQLiteHelper(this);
+        sql.createDB();
+        Parse.initialize(this, "GSJTIddEqF4RT6PmWi6VgKx63b5DWCDVDNRZyR9m", "O17apZByYdFumITsEpo8ndtjfFQ7MIJ3C7U0SYxt");
+        retrieveAllAlbums("Startup");
+        retrieveAllGenres();
+        
+        setContentView(R.layout.activity_main);
+        //Assign UI elements
+        albumNameField = (TextView) findViewById(R.id.albumfield);
+        artistNameField = (TextView) findViewById(R.id.artistfield);
+        yearSpinner = (Spinner) findViewById(R.id.yearspinner);
+        genreSpinner = (Spinner) findViewById(R.id.genrespinner);
+        buttonOne = (Button) findViewById(R.id.buttonPos1);
+        buttonTwo = (Button) findViewById(R.id.buttonPos2);
+        buttonThree = (Button) findViewById(R.id.buttonPos3);
+        buttonFour = (Button) findViewById(R.id.buttonPos4);
+        buttonClickers();
+        createDateSpinner();
+        createGenreSpinner();
+        
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    
+  //The whatWeAreDoing string tells this function if we are checking at boot or if we are 
+  //running a sync operation. Both are very similar in function, so they share the same 
+  //framework.
+   public void retrieveAllAlbums (final String whatWeAreDoing)
+    {
+	   ParseQuery<ParseObject> query = ParseQuery.getQuery("TestObject");
+	   query.findInBackground(new FindCallback<ParseObject>() {
+		   
+		   @Override
+	       public void done(List<ParseObject> albums, ParseException e) {
+	           if (e == null) {
+	               // Put the objects into the MasterList to create the first Master List.
+	               for (ParseObject album : albums) {
+		               HashMap<String,String> thisAlbum = new HashMap<String,String>();
+		               thisAlbum.put("db_id", album.getObjectId());
+		               thisAlbum.put("albumName", album.getString("album_name"));
+		               thisAlbum.put("artistName", album.getString("artist_name"));
+		               thisAlbum.put("date", String.valueOf(album.getInt("album_year")));
+		               thisAlbum.put("genre", String.valueOf(album.getInt("genre_code")));
+		               masterArray.add(thisAlbum);
+		               cloudIDs.add(album.getObjectId());
+	               }
+	               if (whatWeAreDoing == "Sync Data") {
+	                    //If we are syncing data with the cloud, the final step
+	            		//is to dump what is currently in memory and replace it
+	            		//with the cloud data. This happens AFTER additions, modifications,
+	            		//and deletions have occurred.
+	                    sql.emptyDatabase();
+	               }
+	               fillDatabaseIfEmpty();
+	           } else {
+	               Log.d("score", "Error: " + e.getMessage());
+	           }
+	       }	
+	   });
+    }
+   
+   public void retrieveAllGenres()
+   {
+	   ParseQuery<ParseObject> query = ParseQuery.getQuery("MusicGenres");
+	   query.findInBackground(new FindCallback<ParseObject>() {
+		   
+		   @Override
+	       public void done(List<ParseObject> genres, ParseException e) {
+	           if (e == null) {
+	               // Put the objects into the MasterList to create the first Master List.
+	               for (ParseObject genre : genres) {
+	            	   listOfGenres.add(genre.getString("genre_name"));
+	               }
+	           } else {
+	               Log.d("score", "Error: " + e.getMessage());
+	           }
+	       }	
+	   });
+   }
+	               
+    public void fillDatabaseIfEmpty()
+    {
+    	currentDB = sql.getAllAlbums();
+    	int numberOfItems = currentDB.getCount();
+    	if (numberOfItems == 0)
+    	{
+    		int numberOfRecords = masterArray.size();
+            for (int x = 0; x < numberOfRecords; x++)
+            {
+            
+                String stringToAdd = createInsertString(masterArray.get(x));
+                sql.addItemToLocalDatabase(stringToAdd);
+            }
+    	} else {
+    		Log.i("Info","Local data already exists. No need to populate database.");
+    	}
+    	currentDB = sql.getAllAlbums();
+    	reloadListView(currentDB);
+    }
+    
+    public String createInsertString(HashMap<String,String> object)
+    {
+    	String albumID = object.get("db_id");
+    	String albumName = object.get("albumName");
+    	String albumArtist = object.get("artistName");
+    	String albumGenre = object.get("genre");
+    	String albumDate = object.get("date");
+    	
+    	String sqlString = "INSERT INTO albums (database_id,album_name,artist_name,album_year," +
+    			"genre_code,is_edited) VALUES (\""+albumID+"\",\""+albumName+"\"," +
+    					"\""+albumArtist+"\",\""+albumDate+"\"" +
+    							","+albumGenre+",0);";
+    	return sqlString;
+    }
+    
+	public void reloadListView(Cursor thisCursor)
+    {
+    	ArrayList<String> arrayOfAlbums = new ArrayList<String>();
+    	ArrayList<String> arrayOfArtists = new ArrayList<String>();
+        if (thisCursor.moveToFirst()) {
+            do {
+                arrayOfAlbums.add(thisCursor.getString(2));
+                arrayOfArtists.add(thisCursor.getString(3));
+            } while (thisCursor.moveToNext());
+        }
+        
+        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+        for (int x = 0; x < arrayOfAlbums.size(); x++) 
+        {
+            Map<String, String> dataItem = new HashMap<String, String>(2);
+            dataItem.put("album", arrayOfAlbums.get(x));
+            dataItem.put("artist", arrayOfArtists.get(x));
+            data.add(dataItem);
+        }
+        
+        SimpleAdapter adapter = new SimpleAdapter(this, data,
+                                                  android.R.layout.simple_list_item_2,
+                                                  new String[] {"album", "artist"},
+                                                  new int[] {android.R.id.text1,
+                                                             android.R.id.text2});
+        
+        listView = (ListView) findViewById(R.id.listView1);    	
+    	listView.setAdapter(adapter);
+    	listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int item,
+					long id) {
+				
+				updateUIElements(currentDB, item);
+				buttonTwo.setVisibility(View.VISIBLE);
+				buttonThree.setVisibility(View.VISIBLE);
+				yearSpinner.setVisibility(View.VISIBLE);
+				genreSpinner.setVisibility(View.VISIBLE);
+			}
+		});
+    }
+	
+	public void updateUIElements(Cursor cursor, int row)
+	{
+        if (cursor.moveToPosition(row)) {
+        	String albumName = cursor.getString(2);
+        	String artistName = cursor.getString(3);
+        	String yearValue = cursor.getString(4);
+        	String genreValue = cursor.getString(5);
+        	String genreNameValue = retrieveGenreName(genreValue);
+        	albumNameField.setText(albumName);
+        	artistNameField.setText(artistName);
+        	for (int x = 0; x < yearsForPicker.size(); x++)
+        	{
+        		String thisYear = yearsForPicker.get(x);
+        		if (thisYear.contentEquals(yearValue))
+        		{
+        			yearSpinner.setSelection(x);
+        		}
+        	}
+        	for (int y = 0; y < genreList.size(); y ++)
+        	{
+        		String thisGenre = genreList.get(y);
+        		if (thisGenre.contentEquals(genreNameValue))
+        		{
+        			genreSpinner.setSelection(y);
+        		}
+        	}
+        	currentID = cursor.getString(1);
+        }
+	}
+    
+    public void pushNewItemsToCloud()
+    {
+    	Cursor newAlbums = sql.getNewAlbums();
+        if (newAlbums.getCount() > 0)
+        {
+            if (newAlbums.moveToFirst()) 
+            {
+                do {
+                	String thisTitle = newAlbums.getString(1);
+                    String thisArtist = newAlbums.getString(2);
+                    String thisDate = newAlbums.getString(3);
+                    String thisGenre = newAlbums.getString(4);
+                    int dateInt = Integer.parseInt(thisDate);
+                    int genreInt = Integer.parseInt(thisGenre);
+                    ParseObject newAlbum = new ParseObject("TestObject");
+                    newAlbum.put("album_name", thisTitle);
+                    newAlbum.put("artist_name", thisArtist);
+                    newAlbum.put("album_year", dateInt);
+                    newAlbum.put("genre_code", genreInt);
+                    newAlbum.saveInBackground();
+                } while (newAlbums.moveToNext());
+            }
+        }  
+    }
+    
+    public void pushEditedItemsToCloud()
+    {
+    	Cursor newAlbums = sql.getEditedItems();
+        if (newAlbums.getCount() > 0)
+        {
+            if (newAlbums.moveToFirst()) 
+            {
+                do {
+                	String thisID = newAlbums.getString(0);
+                	final String thisTitle = newAlbums.getString(1);
+                    final String thisArtist = newAlbums.getString(2);
+                    String thisDate = newAlbums.getString(3);
+                    String thisGenre = newAlbums.getString(4);
+                    final int dateInt = Integer.parseInt(thisDate);
+                    final int genreInt = Integer.parseInt(thisGenre);
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Test Object");
+                    
+                    query.getInBackground(thisID, new GetCallback<ParseObject>() {
+                    	public void done(ParseObject thisAlbum, ParseException e) {
+                    		if (e == null) {
+                       
+                            thisAlbum.put("album_name", thisTitle);
+                            thisAlbum.put("artist_name", thisArtist);
+                            thisAlbum.put("album_year", dateInt);
+                            thisAlbum.put("genre_code", genreInt);
+                            thisAlbum.saveInBackground();
+                    		}
+                    	}
+                    });
+                } while (newAlbums.moveToNext());
+            }
+        }  
+    }
+    
+    public void deleteItemsInCloud(Context context)
+    {
+    	ArrayList<String> localIDs = new ArrayList<String>();
+    	currentDB = sql.getAllAlbums();
+    	if (currentDB.moveToFirst()) 
+        {
+            do {
+            	String thisID = currentDB.getString(0);
+            	localIDs.add(thisID);
+            } while (currentDB.moveToNext());
+        }
+    	
+    	for (int x = 0; x < cloudIDs.size(); x++)
+    	{
+    		String cloudID = cloudIDs.get(x);
+    		if (localIDs.contains(cloudID))
+    		{
+    			//Do nothing
+    		} else {
+    			ParseQuery<ParseObject> query = ParseQuery.getQuery("GameScore");
+    			// Retrieve the object by id
+    			query.getInBackground(cloudID, new GetCallback<ParseObject>() {
+    			  public void done(ParseObject object, ParseException e) {
+    			    if (e == null) {
+    			      // Now let's update it with some new data. In this case, only cheatMode and score
+    			      // will get sent to the Parse Cloud. playerName hasn't changed.
+    			    	object.deleteInBackground();
+    			    }
+    			  }
+    			});
+    		}
+    	}
+    }
+    
+    public String retrieveGenreName(String genreCode)
+    {
+    	int genreInt = Integer.valueOf(genreCode);
+    	String thisGenre = listOfGenres.get(genreInt-1);
+    	return thisGenre;
+    }
+    
+    public String retrieveGenreCode(String genreName)
+    {
+    	String genreID = "";
+        for (int x = 0; x < listOfGenres.size(); x++)
+        {
+            String thisGenre = listOfGenres.get(x);
+            if (genreName.contentEquals(thisGenre))
+            {
+            	genreID = String.valueOf(x+1);
+            }
+        }
+        return genreID;
+    }
+    
+    public void buttonClickers()
+    {
+    	buttonOne.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Button b = (Button) v;
+				String buttonText = b.getText().toString();
+				if (buttonText.contentEquals("Add"))
+				{
+					albumNameField.setEnabled(true);
+					artistNameField.setEnabled(true);
+					albumNameField.setText("");
+					artistNameField.setText("");
+					buttonOne.setText("Add Item");
+					buttonThree.setText("Cancel");
+					buttonTwo.setEnabled(false);
+					buttonFour.setEnabled(false);
+					yearSpinner.setClickable(true);
+					genreSpinner.setClickable(true);
+				} else if (buttonText.contentEquals("Confirm"))
+				{
+					HashMap<String,String> currentData = new HashMap<String,String>();
+					currentData.put("title", albumNameField.getText().toString());
+					currentData.put("artist", artistNameField.getText().toString());
+					currentData.put("date", yearSpinner.getSelectedItem().toString());
+					String genreValue = genreSpinner.getSelectedItem().toString();
+					String genreValueString = retrieveGenreCode(genreValue);
+					currentData.put("genre", genreValueString);
+					sql.modifyItemInDatabase(currentID, currentData);
+					albumNameField.setEnabled(false);
+					artistNameField.setEnabled(false);
+					buttonOne.setText("Add");
+					buttonThree.setText("Delete");
+					buttonTwo.setEnabled(true);
+					buttonThree.setEnabled(true);
+					buttonFour.setEnabled(true);
+					yearSpinner.setClickable(false);
+					genreSpinner.setClickable(false);
+					currentDB = sql.getAllAlbums();
+					reloadListView(currentDB);		
+				} else if (buttonText.contentEquals("Add Item"))
+				{
+					String albumNameString = albumNameField.getText().toString();
+					String artistNameString = artistNameField.getText().toString();
+			    	if (albumNameString.contentEquals("") || artistNameString.contentEquals(""))
+			    	{
+			    		Toast warning = Toast.makeText(MainActivity.this, "You need to specify both an album name and an artist name to save data to the database.", Toast.LENGTH_SHORT);
+			    		warning.show();
+			    	} else {
+			    		String genreValueString = retrieveGenreCode(genreString);
+			    		String returnString = "INSERT INTO albums (database_id,album_name,artist_name," +
+			    				"album_year,genre_code,is_edited) VALUES (\"NEW\",\""+albumNameString+"\",\""
+			    				+artistNameString+"\","+yearString+","+genreValueString+",0);";
+			    		sql.addItemToLocalDatabase(returnString);
+			    		
+			    		//Add this object to the current master Cursor
+			    		Cursor newList = sql.getAllAlbums();
+			    		reloadListView(newList);
+						albumNameField.setEnabled(false);
+						artistNameField.setEnabled(false);
+						buttonOne.setText("Add");
+						buttonThree.setText("Delete");
+						buttonTwo.setEnabled(true);
+						buttonThree.setEnabled(true);
+						buttonFour.setEnabled(true);
+						yearSpinner.setClickable(false);
+						genreSpinner.setClickable(false);
+						
+						Cursor updatedList = sql.getAllAlbums();
+						reloadListView(updatedList);
+			    	}
+				}
+			}
+		});
+    	
+    	buttonTwo.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Button b = (Button) v;
+				String buttonText = b.getText().toString();
+				if (buttonText.contentEquals("Edit"))
+				{
+					albumNameField.setEnabled(true);
+					artistNameField.setEnabled(true);
+					buttonOne.setText("Confirm");
+					buttonThree.setText("Cancel");
+					buttonTwo.setEnabled(false);
+					buttonFour.setEnabled(false);
+					yearSpinner.setClickable(true);
+					genreSpinner.setClickable(true);
+					yearSpinner.setVisibility(View.VISIBLE);
+					genreSpinner.setVisibility(View.VISIBLE);
+					
+				}
+				
+			}
+		});
+    	
+    	buttonThree.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Button b = (Button) v;
+				String buttonText = b.getText().toString();
+				if (buttonText.contentEquals("Delete"))
+				{
+					sql.removeItemInDatabase(currentID);
+					Cursor updatedList = sql.getAllAlbums();
+					reloadListView(updatedList);
+				}
+				if (buttonText.contentEquals("Cancel"))
+				{
+					albumNameField.setEnabled(false);
+					artistNameField.setEnabled(false);
+					buttonOne.setText("Add");
+					buttonThree.setText("Delete");
+					buttonTwo.setEnabled(true);
+					buttonThree.setEnabled(true);
+					buttonFour.setEnabled(true);
+					yearSpinner.setClickable(false);
+					genreSpinner.setClickable(false);
+					
+				}
+				
+				
+			}
+		});
+    	
+    	buttonFour.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Button b = (Button) v;
+				// TODO Auto-generated method stub
+				
+			}
+		});
+    }
+    
+    public void createDateSpinner() {
+
+    	ArrayAdapter<String> dateAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, yearsForPicker);	
+		dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		yearSpinner.setAdapter(dateAdapter);
+		//Adapter that listens for which spinner item has been clicked.
+		yearSpinner.setOnItemSelectedListener(new OnItemSelectedListener() 
+		{
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				yearString = yearSpinner.getSelectedItem().toString();
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+    }
+    
+    public void createGenreSpinner() {
+
+    	genreList = new ArrayList<String>();
+    	genreList.add("Modern Rock");
+    	genreList.add("Classic Rock");
+    	genreList.add("Hip Hop");
+    	genreList.add("Pop");
+    	genreList.add("R&B");
+    	genreList.add("Jazz");
+    	genreList.add("Classical");
+    	genreList.add("Other");
+    	ArrayAdapter<String> genreAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genreList);	
+		genreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		genreSpinner.setAdapter(genreAdapter);
+		//Adapter that listens for which spinner item has been clicked.
+		genreSpinner.setOnItemSelectedListener(new OnItemSelectedListener() 
+		{
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				
+				genreString = genreSpinner.getSelectedItem().toString();
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				 
+			}
+		});
+    }
+    
+  /*--Init
+    int myvar = 12;
+
+
+    //--SAVE Data
+    SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);  
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putInt("var1", myvar);
+    editor.commit();*/
+    
+}

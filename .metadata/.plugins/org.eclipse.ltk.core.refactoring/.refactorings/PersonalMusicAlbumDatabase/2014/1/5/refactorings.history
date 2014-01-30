@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Extracts string &apos;List Sort&apos; into R.string.list_sort" description="Extracts string &apos;List Sort&apos; into R.string.list_sort" file="/PersonalMusicAlbumDatabase/res/layout/activity_main.xml" flags="6" id="com.android.ide.eclipse.adt.refactoring.extract.string" mode="EDIT_SOURCE" proj="/PersonalMusicAlbumDatabase" rplc-all-java="false" rplc-all-xml="false" sel-end="2298" sel-start="2275" stamp="1391104155731" tok-esc="List Sort" xml-attr-name="android:text"/>
+</session>

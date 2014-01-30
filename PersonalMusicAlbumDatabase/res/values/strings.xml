@@ -4,5 +4,6 @@
     <string name="app_name">Personal Music Album Database</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="list_sort">List Sort</string>
 
 </resources>

@@ -62,6 +62,18 @@
 		        android:layout_height="152dp"
 		        android:contentDescription="albumimage"
 		        android:src="@drawable/ic_launcher" />
+
+		    <TextView
+		        android:id="@+id/spinnerLabel"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/list_sort"
+		        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+		    <Spinner
+		        android:id="@+id/sortSpinner"
+		        android:layout_width="match_parent"
+		        android:layout_height="32dp" />
 	    
 	    </LinearLayout>
 	    

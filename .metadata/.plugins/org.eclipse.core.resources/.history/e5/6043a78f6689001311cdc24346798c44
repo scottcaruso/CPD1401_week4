@@ -99,9 +99,8 @@ public class MainActivity extends Activity {
     		int numberOfRecords = masterArrray.getCount();
             for (int x = 0; x < numberOfRecords; x++)
             {
-            
-                String stringToAdd = createInsertString(masterArrray.getItem(x));
-                sql.addItemToLocalDatabase(stringToAdd);
+                String stringToAdd = "Test";//[self createInsertString:[masterList objectAtIndex:x]];
+                sql.addItemToDatabase(stringToAdd);
             }
     	} else {
     		Log.i("Info","Local data already exists. No need to populate database.");
@@ -110,20 +109,7 @@ public class MainActivity extends Activity {
     	reloadListView();
     }
     
-    public String createInsertString(HashMap<String,String> object)
-    {
-    	String albumID = object.get("db_id");
-    	String albumName = object.get("albumName");
-    	String albumArtist = object.get("artistName");
-    	String albumGenre = object.get("genre");
-    	String albumDate = object.get("date");
-    	
-    	String sqlString = "INSERT INTO albums (database_id,album_name,artist_name,album_year," +
-    			"genre_code,is_edited) VALUES(db_id=\""+albumID+"\",albumName=\""+albumName+"\"" +
-    					",artist_name=\""+albumArtist+"\",album_year=\""+albumDate+"\"" +
-    							",album_genre=\""+albumGenre+"\",is_edited=0;";
-    	return sqlString;
-    }
+    //Create insert string function will go here.
     
     //Table population functions
     

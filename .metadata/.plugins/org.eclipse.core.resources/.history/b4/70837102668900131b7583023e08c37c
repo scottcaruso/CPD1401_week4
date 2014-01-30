@@ -13,6 +13,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
 	private static final int DB_VER = 1;
 	private static final String DB_NAME = "AlbumDB";
+	
+    private static final String TABLE_ALBUMS = "albums";
+    private static final String TABLE_GENRES = "genres";
 
     private static final String KEY_ID = "id";
     private static final String DB_ID = "db_id";
@@ -30,9 +33,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	 @Override
 	 public void onCreate(SQLiteDatabase db) {
 	 
-		 String CREATE_TABLE_ALBUMS = "CREATE TABLE IF NOT EXISTS albums (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+		 String CREATE_TABLE_ALBUMS = "CREATE TABLE IF NOT EXISTS " + TABLE_ALBUMS + 
+		 		"(id INTEGER PRIMARY KEY AUTOINCREMENT," +
 		 		"db_id varchar(50), album_name varchar(50), artist_name varchar(50), album_year INTEGER, genre_code INTEGER, is_edited INTEGER);";
-		 String CREATE_TABLE_GENRES = "CREATE TABLE IF NOT EXISTS genres (id INTEGER PRIMARY KEY," +
+		 String CREATE_TABLE_GENRES = "CREATE TABLE genres (id INTEGER PRIMARY KEY," +
 		 		"genre_id INTEGER, role varchar(20));";
 		 db.execSQL(CREATE_TABLE_ALBUMS);
 		 db.execSQL(CREATE_TABLE_GENRES);

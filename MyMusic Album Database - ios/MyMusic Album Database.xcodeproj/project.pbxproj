@@ -23,7 +23,6 @@
 		306B94CF188E09FB00429DB1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 306B94B1188E09FA00429DB1 /* UIKit.framework */; };
 		306B94D7188E09FB00429DB1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 306B94D5188E09FB00429DB1 /* InfoPlist.strings */; };
 		306B94D9188E09FB00429DB1 /* MyMusic_Album_DatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 306B94D8188E09FB00429DB1 /* MyMusic_Album_DatabaseTests.m */; };
-		306B94E3188E0A6700429DB1 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 306B94E2188E0A6700429DB1 /* Parse.framework */; };
 		306B94E5188E0AA100429DB1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 306B94E4188E0AA100429DB1 /* AudioToolbox.framework */; };
 		306B94E7188E0AA900429DB1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 306B94E6188E0AA900429DB1 /* CFNetwork.framework */; };
 		306B94E9188E0AB800429DB1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 306B94E8188E0AB800429DB1 /* CoreLocation.framework */; };
@@ -34,6 +33,7 @@
 		306B94F3188E0AEC00429DB1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 306B94F2188E0AEC00429DB1 /* StoreKit.framework */; };
 		306B94F5188E0AF200429DB1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 306B94F4188E0AF200429DB1 /* SystemConfiguration.framework */; };
 		30C6415D1891425400B3E174 /* cover_placeholder.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 30C6415C1891425400B3E174 /* cover_placeholder.jpg */; };
+		30CA55D2189A0DDB00DA90DF /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30CA55D1189A0DDB00DA90DF /* Parse.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +69,6 @@
 		306B94D4188E09FB00429DB1 /* MyMusic Album DatabaseTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MyMusic Album DatabaseTests-Info.plist"; sourceTree = "<group>"; };
 		306B94D6188E09FB00429DB1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		306B94D8188E09FB00429DB1 /* MyMusic_Album_DatabaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyMusic_Album_DatabaseTests.m; sourceTree = "<group>"; };
-		306B94E2188E0A6700429DB1 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		306B94E4188E0AA100429DB1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		306B94E6188E0AA900429DB1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		306B94E8188E0AB800429DB1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -80,6 +79,7 @@
 		306B94F2188E0AEC00429DB1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		306B94F4188E0AF200429DB1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		30C6415C1891425400B3E174 /* cover_placeholder.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cover_placeholder.jpg; sourceTree = "<group>"; };
+		30CA55D1189A0DDB00DA90DF /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,9 +97,9 @@
 				306B94E9188E0AB800429DB1 /* CoreLocation.framework in Frameworks */,
 				306B94B0188E09FA00429DB1 /* CoreGraphics.framework in Frameworks */,
 				306B94E7188E0AA900429DB1 /* CFNetwork.framework in Frameworks */,
+				30CA55D2189A0DDB00DA90DF /* Parse.framework in Frameworks */,
 				306B94E5188E0AA100429DB1 /* AudioToolbox.framework in Frameworks */,
 				306B94B2188E09FA00429DB1 /* UIKit.framework in Frameworks */,
-				306B94E3188E0A6700429DB1 /* Parse.framework in Frameworks */,
 				306B94AE188E09FA00429DB1 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -120,7 +120,7 @@
 		306B94A1188E09FA00429DB1 = {
 			isa = PBXGroup;
 			children = (
-				306B94E2188E0A6700429DB1 /* Parse.framework */,
+				30CA55D1189A0DDB00DA90DF /* Parse.framework */,
 				306B94B3188E09FA00429DB1 /* MyMusic Album Database */,
 				306B94D2188E09FB00429DB1 /* MyMusic Album DatabaseTests */,
 				306B94AC188E09FA00429DB1 /* Frameworks */,
@@ -436,7 +436,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/scottcaruso/Desktop/Schoolwork/Month\\ 26/Week\\ 3/MyMusic\\ Album\\ Database",
+					"/Users/scottcaruso/Desktop/Schoolwork/Month\\ 26/Week\\ 3\\ and\\ 4/CPD1401_week4/MyMusic\\ Album\\ Database\\ -\\ ios",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyMusic Album Database/MyMusic Album Database-Prefix.pch";
@@ -453,7 +453,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/scottcaruso/Desktop/Schoolwork/Month\\ 26/Week\\ 3/MyMusic\\ Album\\ Database",
+					"/Users/scottcaruso/Desktop/Schoolwork/Month\\ 26/Week\\ 3\\ and\\ 4/CPD1401_week4/MyMusic\\ Album\\ Database\\ -\\ ios",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyMusic Album Database/MyMusic Album Database-Prefix.pch";

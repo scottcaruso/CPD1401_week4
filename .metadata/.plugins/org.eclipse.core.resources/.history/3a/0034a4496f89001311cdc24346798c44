@@ -122,7 +122,6 @@ public class MainActivity extends Activity {
     			"genre_code,is_edited) VALUES(db_id=\""+albumID+"\",albumName=\""+albumName+"\"" +
     					",artist_name=\""+albumArtist+"\",album_year=\""+albumDate+"\"" +
     							",album_genre=\""+albumGenre+"\",is_edited=0;";
-    	return sqlString;
     }
     
     //Table population functions

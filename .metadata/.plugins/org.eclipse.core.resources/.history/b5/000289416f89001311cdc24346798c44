@@ -118,11 +118,6 @@ public class MainActivity extends Activity {
     	String albumGenre = object.get("genre");
     	String albumDate = object.get("date");
     	
-    	String sqlString = "INSERT INTO albums (database_id,album_name,artist_name,album_year," +
-    			"genre_code,is_edited) VALUES(db_id=\""+albumID+"\",albumName=\""+albumName+"\"" +
-    					",artist_name=\""+albumArtist+"\",album_year=\""+albumDate+"\"" +
-    							",album_genre=\""+albumGenre+"\",is_edited=0;";
-    	return sqlString;
     }
     
     //Table population functions

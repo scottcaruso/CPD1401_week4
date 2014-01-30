@@ -55,24 +55,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	 
 	       SQLiteDatabase db = this.getWritableDatabase();
 	       Cursor cursor = db.rawQuery(query, null);
-	       db.close();
 	       	        
 	       return cursor;  
 	   }
-	 
-	 public void addItemToLocalDatabase(String sqlString)
-	 {
-		 SQLiteDatabase db = this.getWritableDatabase();
-		 db.execSQL(sqlString);
-		 db.close();
-	 }
 	 
 	 public Cursor getNewAlbums() {
 	       String query = "SELECT * FROM albums WHERE database_id=\"NEW\";";
 
 	       SQLiteDatabase db = this.getWritableDatabase();
 	       Cursor cursor = db.rawQuery(query, null);
-	       db.close();
 	       	        
 	       return cursor;
 	   }
@@ -83,7 +74,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	 
 	       SQLiteDatabase db = this.getWritableDatabase();
 	       Cursor cursor = db.rawQuery(query, null);
-	       db.close();
 	       	        
 	       return cursor;    
 	   }
@@ -93,7 +83,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		 String query = "DELETE FROM albums;VACUUM;";
 		 SQLiteDatabase db = this.getWritableDatabase();
 		 db.execSQL(query);
-		 db.close();
 	 }
 	 
 	 public void modifyItemInDatabase(String dbID, HashMap<String,String> data)
@@ -106,26 +95,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 				"\",album_year=\""+newYear+"\",album_genre=\""+newGenre+"\",is_edited=1 WHERE db_id=\""+dbID+"\");";
 		 
 		 SQLiteDatabase db = this.getWritableDatabase();
-		 db.execSQL(sqlString); 
-		 db.close();
-	 }
-	 
-	 public void removeItemInDatabase(String dbID)
-	 {
-		 String sqlString = "DELETE FROM albums WHERE database_id=\""+dbID+"\";";
+		 db.execSQL(sqlString);
 		 
-		 SQLiteDatabase db = this.getWritableDatabase();
-		 db.execSQL(sqlString); 
-		 db.close();
 	 }
 	 
-	 public Cursor getFilteredResults(int filterParam) {
-	       String query = "SELECT * FROM albums WHERE genre_code="+filterParam+";";
+	 public void addItemToDatabase(String itemToAdd){
+		 //do things
+	 }
 	 
-	       SQLiteDatabase db = this.getWritableDatabase();
-	       Cursor cursor = db.rawQuery(query, null);
-	       db.close();
-	       	        
-	       return cursor;  
-	   } 
+	 
+		 
 }

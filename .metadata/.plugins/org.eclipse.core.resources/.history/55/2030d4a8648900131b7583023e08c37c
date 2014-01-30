@@ -60,13 +60,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	       return cursor;  
 	   }
 	 
-	 public void addItemToLocalDatabase(String sqlString)
-	 {
-		 SQLiteDatabase db = this.getWritableDatabase();
-		 db.execSQL(sqlString);
-		 db.close();
-	 }
-	 
 	 public Cursor getNewAlbums() {
 	       String query = "SELECT * FROM albums WHERE database_id=\"NEW\";";
 

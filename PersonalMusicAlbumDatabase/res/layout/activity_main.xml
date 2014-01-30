@@ -88,17 +88,18 @@
 
 	        <Spinner
 	            android:id="@+id/yearspinner"
-	            android:layout_width="114dp"
+	            android:layout_width="150dp"
 	            android:layout_height="wrap_content"
-	            android:clickable="false"
 	            android:visibility="invisible"
+	            android:clickable="false"
 	            android:layout_gravity="right" />
 
 	        <Spinner
 	            android:id="@+id/genrespinner"
-	            android:layout_width="114dp"
+	            android:layout_width="150dp"
 	            android:layout_height="wrap_content"
 	            android:visibility="invisible"
+	            android:clickable="false"
 	            android:layout_gravity="right" />
 	        
 	    </LinearLayout>

@@ -461,7 +461,6 @@ public class MainActivity extends Activity {
 						buttonFour.setEnabled(true);
 						yearSpinner.setClickable(false);
 						genreSpinner.setClickable(false);
-						filterSpinner.setSelection(0);
 						
 						Cursor updatedList = sql.getAllAlbums();
 						reloadListView(updatedList);
@@ -505,7 +504,6 @@ public class MainActivity extends Activity {
 					sql.removeItemInDatabase(currentID);
 					Cursor updatedList = sql.getAllAlbums();
 					reloadListView(updatedList);
-					filterSpinner.setSelection(0);
 				}
 				if (buttonText.contentEquals("Cancel"))
 				{

@@ -89,7 +89,6 @@ public class MainActivity extends Activity {
         buttonClickers();
         createDateSpinner();
         createGenreSpinner();
-        createFilterSpinner();
         
     }
 
@@ -433,7 +432,6 @@ public class MainActivity extends Activity {
 					genreSpinner.setClickable(false);
 					currentDB = sql.getAllAlbums();
 					reloadListView(currentDB);		
-					filterSpinner.setSelection(0);
 				} else if (buttonText.contentEquals("Add Item"))
 				{
 					String albumNameString = albumNameField.getText().toString();
@@ -461,7 +459,6 @@ public class MainActivity extends Activity {
 						buttonFour.setEnabled(true);
 						yearSpinner.setClickable(false);
 						genreSpinner.setClickable(false);
-						filterSpinner.setSelection(0);
 						
 						Cursor updatedList = sql.getAllAlbums();
 						reloadListView(updatedList);
@@ -505,7 +502,6 @@ public class MainActivity extends Activity {
 					sql.removeItemInDatabase(currentID);
 					Cursor updatedList = sql.getAllAlbums();
 					reloadListView(updatedList);
-					filterSpinner.setSelection(0);
 				}
 				if (buttonText.contentEquals("Cancel"))
 				{
@@ -619,8 +615,7 @@ public class MainActivity extends Activity {
 					reloadListView(currentDB);
 				} else
 				{
-					currentDB = sql.getFilteredResults(arg2);
-					reloadListView(currentDB);
+					
 				}
 				
 			}

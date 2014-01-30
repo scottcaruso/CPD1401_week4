@@ -47,13 +47,11 @@ public class MainActivity extends Activity {
 	public static String currentID;
 	public static Spinner yearSpinner;
 	public static Spinner genreSpinner;
-	public static Spinner filterSpinner;
 	public static String yearString;
 	public static String genreString;
 	
 	public static ArrayList<String> yearsForPicker;
 	public static ArrayList<String> genreList;
-	public static ArrayList<String> filterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +79,6 @@ public class MainActivity extends Activity {
         artistNameField = (TextView) findViewById(R.id.artistfield);
         yearSpinner = (Spinner) findViewById(R.id.yearspinner);
         genreSpinner = (Spinner) findViewById(R.id.genrespinner);
-        filterSpinner = (Spinner) findViewById(R.id.sortSpinner);
         buttonOne = (Button) findViewById(R.id.buttonPos1);
         buttonTwo = (Button) findViewById(R.id.buttonPos2);
         buttonThree = (Button) findViewById(R.id.buttonPos3);
@@ -89,7 +86,6 @@ public class MainActivity extends Activity {
         buttonClickers();
         createDateSpinner();
         createGenreSpinner();
-        createFilterSpinner();
         
     }
 
@@ -433,7 +429,6 @@ public class MainActivity extends Activity {
 					genreSpinner.setClickable(false);
 					currentDB = sql.getAllAlbums();
 					reloadListView(currentDB);		
-					filterSpinner.setSelection(0);
 				} else if (buttonText.contentEquals("Add Item"))
 				{
 					String albumNameString = albumNameField.getText().toString();
@@ -461,7 +456,6 @@ public class MainActivity extends Activity {
 						buttonFour.setEnabled(true);
 						yearSpinner.setClickable(false);
 						genreSpinner.setClickable(false);
-						filterSpinner.setSelection(0);
 						
 						Cursor updatedList = sql.getAllAlbums();
 						reloadListView(updatedList);
@@ -505,7 +499,6 @@ public class MainActivity extends Activity {
 					sql.removeItemInDatabase(currentID);
 					Cursor updatedList = sql.getAllAlbums();
 					reloadListView(updatedList);
-					filterSpinner.setSelection(0);
 				}
 				if (buttonText.contentEquals("Cancel"))
 				{
@@ -590,47 +583,14 @@ public class MainActivity extends Activity {
 		});
     }
     
-    public void createFilterSpinner() {
+  /*--Init
+    int myvar = 12;
 
-    	filterList = new ArrayList<String>();
-    	filterList.add("All");
-    	filterList.add("Modern Rock");
-    	filterList.add("Classic Rock");
-    	filterList.add("Hip Hop");
-    	filterList.add("Pop");
-    	filterList.add("R&B");
-    	filterList.add("Jazz");
-    	filterList.add("Classical");
-    	filterList.add("Other");
-    	ArrayAdapter<String> genreAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filterList);	
-		genreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		filterSpinner.setAdapter(genreAdapter);
-		//Adapter that listens for which spinner item has been clicked.
-		filterSpinner.setOnItemSelectedListener(new OnItemSelectedListener() 
-		{
 
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				
-				if (arg2 == 0)
-				{
-					currentDB = sql.getAllAlbums();
-					reloadListView(currentDB);
-				} else
-				{
-					currentDB = sql.getFilteredResults(arg2);
-					reloadListView(currentDB);
-				}
-				
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				 
-			}
-		});
-    }
+    //--SAVE Data
+    SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);  
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putInt("var1", myvar);
+    editor.commit();*/
     
 }
